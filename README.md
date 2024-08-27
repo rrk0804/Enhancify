@@ -14,3 +14,8 @@ Check out [Spicetify's docs](https://spicetify.app/docs/development/spicetify-cr
 
 ## Made with Spicetify Creator
 - https://github.com/spicetify/spicetify-creator
+
+## Contributors
+- Anish Sudini
+- Pari Mohite
+- Rajit Khatri
