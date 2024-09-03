@@ -14,10 +14,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   }
   
   setAudioFeatures = () => {
-    if (Spicetify.Player.data == null) {
-      return;
-    }
-    if (this.state.songURI == Spicetify.Player.data.item.uri) {
+    if (!Spicetify.Player.data || this.state.songURI == Spicetify.Player.data.item.uri) {
       return;
     }
     this.state.songURI = Spicetify.Player.data.item.uri;
