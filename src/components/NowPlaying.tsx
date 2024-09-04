@@ -1,7 +1,7 @@
 import styles from "../css/app.module.scss";
 import React from "react";
 import getAudioFeatures from "../services/nowPlayingService";
-import AudioFeaturesResponse from "../types/spotify-web-api";
+import { AudioFeaturesResponse } from "../types/spotify-web-api";
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, songURI: string}> {
   state = {
