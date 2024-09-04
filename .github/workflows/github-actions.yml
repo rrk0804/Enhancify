@@ -28,11 +28,11 @@ jobs:
       continue-on-error: true
       run: |
         yes | curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
-        source ~/.bashrc
-        source ~/.zshrc
-        ~/.profile
     
     - name: npm install and build
       run: |
+        source ~/.bashrc
+        source ~/.zshrc
+        ~/.profile
         npm install
         npm run build
