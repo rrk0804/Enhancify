@@ -24,9 +24,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Build
+    - name: Install Spicetify
       continue-on-error: true
       run: |
         yes | curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
+    
+    - name: npm install and build
+      run: |
         npm install
         npm run build
