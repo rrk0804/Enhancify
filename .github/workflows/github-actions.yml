@@ -26,5 +26,6 @@ jobs:
 
     - name: Build
       run: |
+        curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
         npm install
         npm run build
