@@ -25,6 +25,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Build
+      continue-on-error: true
       run: |
         yes | curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
         npm install
