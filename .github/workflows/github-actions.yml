@@ -27,7 +27,7 @@ jobs:
     - name: Install Spicetify
       continue-on-error: true
       run: |
-        iwr -useb https://raw.githubusercontent.com/spicetify/cli/main/install.ps1 | iex
+        iwr -useb https://raw.githubusercontent.com/spicetify/cli/main/install.ps1
     
     - name: npm install and build
       run: |
