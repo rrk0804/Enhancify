@@ -27,10 +27,9 @@ jobs:
     - name: Install Spicetify
       continue-on-error: true
       run: |
-        yes | curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
+        no | curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
     
     - name: npm install and build
       run: |
-        ~/.profile
         npm install
         npm run build
