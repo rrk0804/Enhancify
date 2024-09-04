@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -23,13 +23,8 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Install Spicetify
-      continue-on-error: true
-      run: |
-        iwr -useb https://raw.githubusercontent.com/spicetify/cli/main/install.ps1
     
     - name: npm install and build
       run: |
         npm install
-        npm run build
+        npm run build2
