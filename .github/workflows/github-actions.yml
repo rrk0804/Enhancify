@@ -31,7 +31,6 @@ jobs:
     
     - name: npm install and build
       run: |
-        source ~/.bashrc
         source ~/.zshrc
         ~/.profile
         npm install
