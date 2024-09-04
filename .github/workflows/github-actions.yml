@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     strategy:
       matrix:
@@ -27,7 +27,7 @@ jobs:
     - name: Install Spicetify
       continue-on-error: true
       run: |
-        yes | curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
+        iwr -useb https://raw.githubusercontent.com/spicetify/cli/main/install.ps1 | iex
     
     - name: npm install and build
       run: |
