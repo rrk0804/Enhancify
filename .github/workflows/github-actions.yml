@@ -31,7 +31,7 @@ jobs:
     
     - name: Update path
       run: |
-        echo "export PATH=\$PATH:/home/runner/.spicetify" >> $GITHUB_ENV
+        echo "/home/runner/.spicetify" >> $GITHUB_PATH
     
     - name: npm install and build
       run: |
