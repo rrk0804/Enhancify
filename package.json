@@ -16,4 +16,5 @@
   "dependencies": {
     "@spotify/web-api-ts-sdk": "^1.2.0"
   }
+  
 }
