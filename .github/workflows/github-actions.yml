@@ -31,7 +31,7 @@ jobs:
     
     - name: npm install and build
       run: |
-        echo "/home/runner/.spicetify" >> $GITHUB_PATH
+        echo "export PATH=\$PATH:/usr/local/bin:/home/runner/.spicetify" >> $GITHUB_ENV
         echo $GITHUB_PATH
         echo $PATH
         npm install
