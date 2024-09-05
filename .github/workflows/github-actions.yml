@@ -31,8 +31,6 @@ jobs:
     
     - name: npm install and build
       run: |
-        echo 'export SPICETIFY_INSTALL="/home/runner/.spicetify"' >> ~/.basrhc
-        echo 'export PATH="$PATH:/home/runner/.spicetify"' >> ~/.bashrc
-        source ~/.basrhc
+        echo $PATH
         npm install
         npm run build
