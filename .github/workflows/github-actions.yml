@@ -29,9 +29,12 @@ jobs:
       run: |
         no | curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
     
+    - name: Update path
+      run: |
+        echo "export PATH=\$PATH:/home/runner/.spicetify" >> $GITHUB_ENV
+    
     - name: npm install and build
       run: |
-        echo "export PATH=\$PATH:/usr/local/bin:/home/runner/.spicetify" >> $GITHUB_ENV
         echo $GITHUB_PATH
         echo $PATH
         npm install
