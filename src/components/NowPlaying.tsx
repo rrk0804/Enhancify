@@ -1,7 +1,7 @@
 import styles from "../css/app.module.scss";
 import React from "react";
 import getAudioFeatures from "../services/nowPlayingService";
-import AudioFeaturesResponse from "../types/spotify-web-api";
+import { AudioFeaturesResponse } from "../types/spotify-web-api";
 
 // All components are now classes
 // Extends means that the class is inheriting all the properties of a React component
@@ -25,8 +25,8 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   }
   
   setAudioFeatures = () => {
-    // Check if the API call has been already made
-    if (this.state.songURI == Spicetify.Player.data.item.uri) {
+    if (!Spicetify.Player.data || this.state.songURI == Spicetify.Player.data.item.uri) {
+
       return;
     }
     this.state.songURI = Spicetify.Player.data.item.uri;

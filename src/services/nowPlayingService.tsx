@@ -1,4 +1,4 @@
-import AudioFeaturesResponse from "../types/spotify-web-api";
+import type { AudioFeaturesResponse } from "../types/spotify-web-api";
 
 async function getAudioFeatures(songURI: string | undefined): Promise<AudioFeaturesResponse | {}> {
     if (!songURI) {
