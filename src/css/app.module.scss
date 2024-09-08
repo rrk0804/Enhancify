@@ -2,3 +2,121 @@
   font-size: 16px;
   word-wrap: break-word;
 }
+
+.trackInfoPrimary {
+  width: 280px;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.trackCover {
+  border-radius: 5px;
+  width: 250px;
+  height: 250px;
+}
+
+.nowPlayingSidebar {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statsBlock {
+  width: 96.5%;
+  height: 290px;
+  margin-top: 40px;
+  margin: 20px;
+  margin-bottom: 0px;
+  border-radius: 5px;
+}
+
+.topBar {
+  display: flex;
+  flex-direction: row;
+}
+
+.recommendationsBlock {
+  width: 70%;
+  border-radius: 5px;
+  margin-top: 8px;
+}
+
+.statsBlock {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  row-gap: 10px;
+  column-gap: 10px;
+  padding: 10px;
+}
+
+.statContainer {
+  background-color: rgb(81, 126, 97);
+  border-radius: 9px;
+  padding: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 10px;
+  display: flex;
+}
+
+.statTitle {
+  font-weight: bolder;
+  font-size: larger;
+}
+
+.recommendationsBlock {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  row-gap: 20px;
+  column-gap: 20px;
+  padding: 20px;
+}
+
+.statLabel {
+  font-weight: 600;
+}
+
+.statValue {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.graphicContainer {
+  justify-content: flex-end;
+  align-self: center;
+  margin-left: auto;
+}
+
+.trackContainer {
+  display: flex;
+  background-image: linear-gradient(to right, rgb(43, 43, 43), rgb(79, 79, 79));
+  border-radius: 10px;
+  padding: 10px;
+  padding-right: 20px;
+}
+
+.recommendationsCover {
+  width: 70px;
+  height: 70px;
+  border-radius: 6px;   
+  margin-right: 20px;   
+}
+
+.trackName {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.playIcon {
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  align-self: center;
+}
