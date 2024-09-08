@@ -27,7 +27,7 @@ jobs:
     - name: Install Spicetify
       continue-on-error: true
       run: |
-        no | curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
+        echo "n" | curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
     
     - name: Update path
       run: |
