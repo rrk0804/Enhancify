@@ -1,0 +1,41 @@
+name: NodeJS
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install Spicetify
+      continue-on-error: true
+      run: |
+        curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
+    
+    - name: Update path
+      run: |
+        echo "/home/runner/.spicetify" >> $GITHUB_PATH
+    
+    - name: npm install and build
+      run: |
+        echo $GITHUB_PATH
+        echo $PATH
+        npm install
+        npm run build
