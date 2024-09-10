@@ -8,7 +8,7 @@ class DynamicRecommendations extends React.Component<{}, {songQueue: Array<strin
   state = {
     songQueue: Spicetify.LocalStorage.get("songQueue")?.split(',') || new Array<string>,
     artistQueue: Spicetify.LocalStorage.get("artistQueue")?.split(',') || new Array<string>,
-    recTarget: "artists",
+    recTarget: "songs",
     recommendations: {},
   }
 
@@ -123,6 +123,19 @@ class DynamicRecommendations extends React.Component<{}, {songQueue: Array<strin
     });
   };
 
+  changeRecTarget = () => {
+    if (this.state.recTarget == "songs") {
+      this.setState({
+        recTarget: "artists",
+      }, () => this.generateRecommendations());
+    }
+    else if (this.state.recTarget == "artists") {
+      this.setState({
+        recTarget: "songs",
+      }, () => this.generateRecommendations());
+    }
+  };
+
   render() {
     Spicetify.Player.addEventListener("onprogress", this.addToQueue);
     return (
@@ -132,6 +145,9 @@ class DynamicRecommendations extends React.Component<{}, {songQueue: Array<strin
           {"artistQueue: " + String(this.state.artistQueue) + "\n"}
           {JSON.stringify(Object.keys(this.state.recommendations).length != 0 ? (this.state.recommendations as GetRecommendationsResponse)["tracks"][0].name : {})}
         </text>
+        <button onClick={this.changeRecTarget}>
+          {this.state.recTarget}
+        </button>
       </>
     );
   }
