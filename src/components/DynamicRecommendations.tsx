@@ -74,22 +74,26 @@ class DynamicRecommendations extends React.Component<{}, {songQueue: Array<strin
     });
   };
 
-  setArtistQueue = () => {
+  shouldArtistQueueBeUpdated = (): boolean => {
     if (!Spicetify.Player.data.item.artists) {
-      return;
+      return false;
+    }
+    if (!this.state.artistQueue) {
+      return true;
     }
 
-    let cont = false;
-    if (this.state.artistQueue) {
-      for (const artist of Spicetify.Player.data.item.artists) {
-        let fromIndex = this.state.artistQueue.length >= Spicetify.Player.data.item.artists.length ? this.state.artistQueue.length - Spicetify.Player.data.item.artists.length : 0;
-        if (!this.state.artistQueue.includes(getID(artist.uri), fromIndex)) {
-          cont = true;
-          break;
-        };
-      }
+    for (const artist of Spicetify.Player.data.item.artists) {
+      let fromIndex = Math.max(0, this.state.artistQueue.length - Spicetify.Player.data.item.artists.length);
+      if (!this.state.artistQueue.includes(getID(artist.uri), fromIndex)) {
+        return true;
+      };
     }
-    if (!cont) {
+
+    return false;
+  };
+
+  setArtistQueue = () => {
+    if (!Spicetify.Player.data.item.artists || !this.shouldArtistQueueBeUpdated()) {
       return;
     }
 
