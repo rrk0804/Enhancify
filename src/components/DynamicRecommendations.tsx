@@ -2,10 +2,13 @@ import styles from "../css/app.module.scss";
 import React from "react";
 import getRecommendations from "../services/dynamicRecommendationsService";
 import { GetRecommendationsInput, GetRecommendationsResponse } from "../types/spotify-web-api.d";
+import getID from './../services/common';
 
-class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, recommendations: GetRecommendationsResponse | {}}> {
+class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, artistQueue: Array<string>, recTarget: string, recommendations: GetRecommendationsResponse | {}}> {
   state = {
     queue: Spicetify.LocalStorage.get("queue")?.split(',') || new Array<string>,
+    artistQueue: Spicetify.LocalStorage.get("artistQueue")?.split(',') || new Array<string>,
+    recTarget: "artists",
     recommendations: {},
   }
 
@@ -15,15 +18,21 @@ class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, 
 
   generateRecommendations = async () => {
     let apiOptions = new GetRecommendationsInput();
-    apiOptions.data.seed_tracks = this.state.queue.toString();
+    if (this.state.recTarget == "songs") {
+      apiOptions.data.seed_tracks = this.state.queue.toString();
+    }
+    else if (this.state.recTarget == "artists") {
+      apiOptions.data.seed_artists = this.state.artistQueue.toString(); 
+    }
+
     var recommendations = await getRecommendations(apiOptions);
     this.setState({
       recommendations: recommendations,
     });
   };
-
+  
   addToQueue = (event?: Event & {data: number}) => {
-    if (!event || !Spicetify.Player.data || this.state.queue.includes(Spicetify.Player.data.item.uri.split(":")[2])) {
+    if (!event || !Spicetify.Player.data) {
       return;
     }
 
@@ -32,12 +41,26 @@ class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, 
       return;
     }
 
+    this.setSongQueue();
+    this.setArtistQueue();
+  };
+
+  setSongQueue = () => {
+    let curSongID = getID(Spicetify.Player.data.item.uri);
+    if (this.state.queue && this.state.queue[this.state.queue.length-1] == curSongID) {
+      return;
+    }
+
     let newQueue = this.state.queue.slice();
-    if (this.state.queue.length == 5) {
+    if (newQueue.includes(curSongID)) {
+      newQueue = newQueue.filter((val, ind) => val != curSongID);
+    }
+
+    newQueue.push(curSongID);
+    if (newQueue.length > 5) {
       newQueue.shift();
     }
 
-    newQueue.push(Spicetify.Player.data.item.uri.split(":")[2]);
     this.setState({
       queue: newQueue,
     }, () => {
@@ -45,16 +68,64 @@ class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, 
         return;
       }
       Spicetify.LocalStorage.set("queue", this.state.queue.toString());
-      this.generateRecommendations();
+      if (this.state.recTarget == "songs") {
+        this.generateRecommendations();
+      }
     });
-  }
+  };
+
+  setArtistQueue = () => {
+    if (!Spicetify.Player.data.item.artists) {
+      return;
+    }
+
+    let cont = false;
+    if (this.state.artistQueue) {
+      for (const artist of Spicetify.Player.data.item.artists) {
+        let fromIndex = this.state.artistQueue.length >= Spicetify.Player.data.item.artists.length ? this.state.artistQueue.length - Spicetify.Player.data.item.artists.length : 0;
+        if (!this.state.artistQueue.includes(getID(artist.uri), fromIndex)) {
+          cont = true;
+          break;
+        };
+      }
+    }
+    if (!cont) {
+      return;
+    }
+
+    let newArtistQueue = this.state.artistQueue.slice();
+    for (const artist of Spicetify.Player.data.item.artists) {
+      let artistID = getID(artist.uri);
+      if (newArtistQueue.includes(artistID)) {
+        newArtistQueue = newArtistQueue.filter((val, ind) => val != artistID);
+      }
+      newArtistQueue.push(artistID);
+    }
+
+    while (newArtistQueue.length > 5) {
+      newArtistQueue.shift();
+    }
+
+    this.setState({
+      artistQueue: newArtistQueue,
+    }, () => {
+      if (Spicetify.LocalStorage.get("artistQueue") == this.state.artistQueue.toString()) {
+        return;
+      }
+      Spicetify.LocalStorage.set("artistQueue", this.state.artistQueue.toString());
+      if (this.state.recTarget == "artists") {
+        this.generateRecommendations();
+      }
+    });
+  };
 
   render() {
     Spicetify.Player.addEventListener("onprogress", this.addToQueue);
     return (
       <>
         <text className={styles.text}>
-          {String(this.state.queue)}
+          {"songQueue: " + String(this.state.queue) + "\n"}
+          {"artistQueue: " + String(this.state.artistQueue) + "\n"}
           {JSON.stringify(Object.keys(this.state.recommendations).length != 0 ? (this.state.recommendations as GetRecommendationsResponse)["tracks"][0].name : {})}
         </text>
       </>
