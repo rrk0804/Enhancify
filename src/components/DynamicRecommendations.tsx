@@ -4,9 +4,9 @@ import getRecommendations from "../services/dynamicRecommendationsService";
 import { GetRecommendationsInput, GetRecommendationsResponse } from "../types/spotify-web-api.d";
 import getID from './../services/common';
 
-class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, artistQueue: Array<string>, recTarget: string, recommendations: GetRecommendationsResponse | {}}> {
+class DynamicRecommendations extends React.Component<{}, {songQueue: Array<string>, artistQueue: Array<string>, recTarget: string, recommendations: GetRecommendationsResponse | {}}> {
   state = {
-    queue: Spicetify.LocalStorage.get("queue")?.split(',') || new Array<string>,
+    songQueue: Spicetify.LocalStorage.get("songQueue")?.split(',') || new Array<string>,
     artistQueue: Spicetify.LocalStorage.get("artistQueue")?.split(',') || new Array<string>,
     recTarget: "artists",
     recommendations: {},
@@ -19,7 +19,7 @@ class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, 
   generateRecommendations = async () => {
     let apiOptions = new GetRecommendationsInput();
     if (this.state.recTarget == "songs") {
-      apiOptions.data.seed_tracks = this.state.queue.toString();
+      apiOptions.data.seed_tracks = this.state.songQueue.toString();
     }
     else if (this.state.recTarget == "artists") {
       apiOptions.data.seed_artists = this.state.artistQueue.toString(); 
@@ -47,11 +47,11 @@ class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, 
 
   setSongQueue = () => {
     let curSongID = getID(Spicetify.Player.data.item.uri);
-    if (this.state.queue && this.state.queue[this.state.queue.length-1] == curSongID) {
+    if (this.state.songQueue && this.state.songQueue[this.state.songQueue.length-1] == curSongID) {
       return;
     }
 
-    let newQueue = this.state.queue.slice();
+    let newQueue = this.state.songQueue.slice();
     if (newQueue.includes(curSongID)) {
       newQueue = newQueue.filter((val, ind) => val != curSongID);
     }
@@ -62,12 +62,12 @@ class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, 
     }
 
     this.setState({
-      queue: newQueue,
+      songQueue: newQueue,
     }, () => {
-      if (Spicetify.LocalStorage.get("queue") == this.state.queue.toString()) {
+      if (Spicetify.LocalStorage.get("songQueue") == this.state.songQueue.toString()) {
         return;
       }
-      Spicetify.LocalStorage.set("queue", this.state.queue.toString());
+      Spicetify.LocalStorage.set("songQueue", this.state.songQueue.toString());
       if (this.state.recTarget == "songs") {
         this.generateRecommendations();
       }
@@ -124,7 +124,7 @@ class DynamicRecommendations extends React.Component<{}, {queue: Array<string>, 
     return (
       <>
         <text className={styles.text}>
-          {"songQueue: " + String(this.state.queue) + "\n"}
+          {"songQueue: " + String(this.state.songQueue) + "\n"}
           {"artistQueue: " + String(this.state.artistQueue) + "\n"}
           {JSON.stringify(Object.keys(this.state.recommendations).length != 0 ? (this.state.recommendations as GetRecommendationsResponse)["tracks"][0].name : {})}
         </text>
