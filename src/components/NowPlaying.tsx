@@ -2,13 +2,20 @@ import styles from "../css/app.module.scss";
 import React from "react";
 import getAudioFeatures from "../services/nowPlayingService";
 import { AudioFeaturesResponse } from "../types/spotify-web-api";
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import getRecommendations from "../services/dynamicRecommendationsService";
+import { GetRecommendationsInput, GetRecommendationsResponse } from "../types/spotify-web-api.d";
 
 // All components are now classes
 // Extends means that the class is inheriting all the properties of a React component
 // The component does not accept any props because it does not take anything in. The second 
 // object describes the state of the component, which contains audioFeatures and songURI. Each 
 // state variable must be typed.
-class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, songURI: string}> {
+class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
+                                              songURI: string, 
+                                              queue: Array<string>, 
+                                              recommendations: GetRecommendationsResponse | {}}> {
   
   // The component has two states: one for holding the features 
   // of the audio and another for holding the song's URI
@@ -16,14 +23,18 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     audioFeatures: {},
     songURI: "",
     songPlayerInfo: {},
+    queue: Spicetify.LocalStorage.get("queue")?.split(',') || new Array<string>,
+    recommendations: {},
   }
 
   // After the component is mounted to the screen, make API 
   // calls to get the features of the currenly playing song
   componentDidMount = () => {
     this.setAudioFeatures();
+    this.generateRecommendations();
   }
   
+  // Function for updating the audio features of the song
   setAudioFeatures = () => {
     if (!Spicetify.Player.data || this.state.songURI == Spicetify.Player.data.item.uri) {
 
@@ -41,14 +52,49 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     apiCall();
   }
   
+  generateRecommendations = async () => {
+    let apiOptions = new GetRecommendationsInput();
+    apiOptions.data.seed_tracks = this.state.queue.toString();
+    var recommendations = await getRecommendations(apiOptions);
+    this.setState({
+      recommendations: recommendations,
+    });
+  };
+
+  addToQueue = (event?: Event & {data: number}) => {
+    if (!event || !Spicetify.Player.data || this.state.queue.includes(Spicetify.Player.data.item.uri.split(":")[2])) {
+      return;
+    }
+
+    let progressPercentage = (event.data / Spicetify.Player.data.item.duration.milliseconds) * 100;
+    if (progressPercentage < 50) {
+      return;
+    }
+
+    let newQueue = this.state.queue.slice();
+    if (this.state.queue.length == 5) {
+      newQueue.shift();
+    }
+
+    newQueue.push(Spicetify.Player.data.item.uri.split(":")[2]);
+    this.setState({
+      queue: newQueue,
+    }, () => {
+      if (Spicetify.LocalStorage.get("queue") == this.state.queue.toString()) {
+        return;
+      }
+      Spicetify.LocalStorage.set("queue", this.state.queue.toString());
+      this.generateRecommendations();
+    });
+  }
+  
   playIcon = <img className={styles.playIcon} src={"https://img.icons8.com/?size=100&id=36067&format=png&color=FFFFFF"}/>;
 
-  nowPlayingStyles = {
-    primaryTrackInfo: {}
-  }
+
   render() {
     // Add an event listener for when the song is changed
     Spicetify.Player.addEventListener("songchange", this.setAudioFeatures);
+    Spicetify.Player.addEventListener("onprogress", this.addToQueue);
     return (
       <>
         {/* <text className={styles.text}>
@@ -112,12 +158,44 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
             {/* Recommendation #1 */}
             <div className={styles.trackContainer}>
               {/* Recommendation cover */}
-              <img className={styles.recommendationsCover} src={"https://upload.wikimedia.org/wikipedia/en/d/dd/Ray_of_Light_Madonna.png"}/>
+              <img className={styles.recommendationsCover} src={Object.keys(this.state.recommendations).length > 0 ? 
+                                                                  (this.state.recommendations as GetRecommendationsResponse)["tracks"][0].album.images[0].url : 
+                                                                ""}/>
               {/* Recommendation track details */}
               <div className={styles.trackDetils}>
-                <div className={styles.trackName}>{"Ray of light"}</div>
-                <div>{"Madonna"}</div>
-                <div>{"Ray of light"}</div>
+                <div className={styles.trackName}>
+                  {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][0].name : 
+                   ""}
+                </div>
+                  {Object.keys(this.state.recommendations).length > 0 ? ( () => {
+                    // Get all the artists
+                    const trackArtists = (this.state.recommendations as GetRecommendationsResponse)["tracks"][0].artists;
+                    let trackAritistsInnnerHTML = "";
+
+                    // Check if there are any artists
+                    if (trackArtists) {
+                      // Display all the artists
+                      for (const artist of trackArtists) {
+                        trackAritistsInnnerHTML += (artist.name + ", ")
+                      }
+                      if(trackAritistsInnnerHTML.length > 0) {
+                        trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
+                      }
+
+                      return (<div className={styles.text}> 
+                                {trackAritistsInnnerHTML} 
+                              </div>);
+                    } else {
+                      return <></>;
+                    }
+
+                    })() : <div></div>}
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][0].album.name : 
+                 ""}
+                </div>
               </div>
               {/* Play icon */}
               {this.playIcon}
@@ -125,49 +203,219 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
             {/* Recommendation #2 */}
             <div className={styles.trackContainer}>
               {/* Recommendation cover */}
-              <img className={styles.recommendationsCover} src={"https://upload.wikimedia.org/wikipedia/en/d/dd/Lady_Gaga_–_The_Fame_album_cover.png"}/>
+              <img className={styles.recommendationsCover} src={Object.keys(this.state.recommendations).length > 0 ? 
+                                                                  (this.state.recommendations as GetRecommendationsResponse)["tracks"][1].album.images[0].url : 
+                                                                ""}/>
               {/* Recommendation track details */}
               <div className={styles.trackDetils}>
-                <div className={styles.trackName}>{"Poker Face"}</div>
-                <div>{"Lady Gaga"}</div>
-                <div>{"The Fame"}</div>
+              <div className={styles.trackName}>
+                  {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][1].name : 
+                   ""}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? ( () => {
+                    // Get all the artists
+                    const trackArtists = (this.state.recommendations as GetRecommendationsResponse)["tracks"][1].artists;
+                    let trackAritistsInnnerHTML = "";
+
+                    // Check if there are any artists
+                    if (trackArtists) {
+                      // Display all the artists
+                      for (const artist of trackArtists) {
+                        trackAritistsInnnerHTML += (artist.name + ", ")
+                      }
+                      if(trackAritistsInnnerHTML.length > 0) {
+                        trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
+                      }
+
+                      return (<div className={styles.text}> 
+                                {trackAritistsInnnerHTML} 
+                              </div>);
+                    } else {
+                      return <></>;
+                    }
+
+                    })() : <div></div>}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][1].album.name : 
+                 ""}
+                </div>
               </div>
               {/* Play icon*/}
               {this.playIcon}
             </div>
             <div className={styles.trackContainer}>
-              <img className={styles.recommendationsCover} src={"https://d3hbw55pes5y9s.cloudfront.net/wp-content/uploads/2009/09/23084712/tumblr_inline_odrvhgDB3x1rpr2it_1280-1.jpg"}/>
+              <img className={styles.recommendationsCover} src={Object.keys(this.state.recommendations).length > 0 ? 
+                                                                  (this.state.recommendations as GetRecommendationsResponse)["tracks"][2].album.images[0].url : 
+                                                                ""}/>
               <div className={styles.trackDetils}>
-                <div className={styles.trackName}>{"Like a Prayer"}</div>
-                <div>{"Madonna"}</div>
-                <div>{"Like a Prayer"}</div>
+              <div className={styles.trackName}>
+                  {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][2].name : 
+                   ""}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? ( () => {
+                    // Get all the artists
+                    const trackArtists = (this.state.recommendations as GetRecommendationsResponse)["tracks"][2].artists;
+                    let trackAritistsInnnerHTML = "";
+
+                    // Check if there are any artists
+                    if (trackArtists) {
+                      // Display all the artists
+                      for (const artist of trackArtists) {
+                        trackAritistsInnnerHTML += (artist.name + ", ")
+                      }
+                      if(trackAritistsInnnerHTML.length > 0) {
+                        trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
+                      }
+
+                      return (<div className={styles.text}> 
+                                {trackAritistsInnnerHTML} 
+                              </div>);
+                    } else {
+                      return <></>;
+                    }
+
+                    })() : <div></div>}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][2].album.name : 
+                 ""}
+                </div>
               </div>
               {this.playIcon}
             </div>
             <div className={styles.trackContainer}>
-              <img className={styles.recommendationsCover} src={"https://i.iheart.com/v3/re/new_assets/63502b9eaee0f4b0e56f9a54?ops=contain(1480,0)"}/>
+              <img className={styles.recommendationsCover} src={Object.keys(this.state.recommendations).length > 0 ? 
+                                                                  (this.state.recommendations as GetRecommendationsResponse)["tracks"][3].album.images[0].url : 
+                                                                ""}/>
               <div className={styles.trackDetils}>
-                <div className={styles.trackName}>{"Anti Hero"}</div>
-                <div>{"Taylor Swift"}</div>
-                <div>{"Midnights"}</div>
+              <div className={styles.trackName}>
+                  {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][3].name : 
+                   ""}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? ( () => {
+                    // Get all the artists
+                    const trackArtists = (this.state.recommendations as GetRecommendationsResponse)["tracks"][3].artists;
+                    let trackAritistsInnnerHTML = "";
+
+                    // Check if there are any artists
+                    if (trackArtists) {
+                      // Display all the artists
+                      for (const artist of trackArtists) {
+                        trackAritistsInnnerHTML += (artist.name + ", ")
+                      }
+                      if(trackAritistsInnnerHTML.length > 0) {
+                        trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
+                      }
+
+                      return (<div className={styles.text}> 
+                                {trackAritistsInnnerHTML} 
+                              </div>);
+                    } else {
+                      return <></>;
+                    }
+
+                    })() : <div></div>}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][3].album.name : 
+                 ""}
+                </div>
               </div>
               {this.playIcon}
             </div>
             <div className={styles.trackContainer}>
-              <img className={styles.recommendationsCover} src={"https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647"}/>
+              <img className={styles.recommendationsCover} src={Object.keys(this.state.recommendations).length > 0 ? 
+                                                                  (this.state.recommendations as GetRecommendationsResponse)["tracks"][4].album.images[0].url : 
+                                                                ""}/>
               <div className={styles.trackDetils}>
-                <div className={styles.trackName}>{"Lover"}</div>
-                <div>{"Taylor Swift"}</div>
-                <div>{"Lover"}</div>
+              <div className={styles.trackName}>
+                  {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][4].name : 
+                   ""}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? ( () => {
+                    // Get all the artists
+                    const trackArtists = (this.state.recommendations as GetRecommendationsResponse)["tracks"][4].artists;
+                    let trackAritistsInnnerHTML = "";
+
+                    // Check if there are any artists
+                    if (trackArtists) {
+                      // Display all the artists
+                      for (const artist of trackArtists) {
+                        trackAritistsInnnerHTML += (artist.name + ", ")
+                      }
+                      if(trackAritistsInnnerHTML.length > 0) {
+                        trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
+                      }
+
+                      return (<div className={styles.text}> 
+                                {trackAritistsInnnerHTML} 
+                              </div>);
+                    } else {
+                      return <></>;
+                    }
+
+                    })() : <div></div>}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][4].album.name : 
+                 ""}
+                </div>
               </div>
               {this.playIcon}
             </div>
             <div className={styles.trackContainer}>
-              <img className={styles.recommendationsCover} src={"https://amateurphotographer.com/wp-content/uploads/sites/7/2024/03/The-original-2014-cover-of-the-Taylor-Swift-album-1989.jpg?w=1024"}/>
+              <img className={styles.recommendationsCover} src={Object.keys(this.state.recommendations).length > 0 ? 
+                                                                  (this.state.recommendations as GetRecommendationsResponse)["tracks"][5].album.images[0].url : 
+                                                                ""}/>
               <div className={styles.trackDetils}>
-                <div className={styles.trackName}>{"Shake It Off"}</div>
-                <div>{"Taylor Swift"}</div>
-                <div>{"1989"}</div>
+              <div className={styles.trackName}>
+                  {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][5].name : 
+                   ""}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? ( () => {
+                    // Get all the artists
+                    const trackArtists = (this.state.recommendations as GetRecommendationsResponse)["tracks"][5].artists;
+                    let trackAritistsInnnerHTML = "";
+
+                    // Check if there are any artists
+                    if (trackArtists) {
+                      // Display all the artists
+                      for (const artist of trackArtists) {
+                        trackAritistsInnnerHTML += (artist.name + ", ")
+                      }
+                      if(trackAritistsInnnerHTML.length > 0) {
+                        trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
+                      }
+
+                      return (<div className={styles.text}> 
+                                {trackAritistsInnnerHTML} 
+                              </div>);
+                    } else {
+                      return <></>;
+                    }
+
+                    })() : <div></div>}
+                </div>
+                <div>
+                {Object.keys(this.state.recommendations).length > 0 ? 
+                    (this.state.recommendations as GetRecommendationsResponse)["tracks"][5].album.name : 
+                 ""}
+                </div>
               </div>
               {this.playIcon}
             </div>
@@ -178,38 +426,49 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           {/* Statistic #1 */}
           <div className={styles.statContainer}>
             <div className={styles.statTextContainer}>
-              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(180,180,180)", fontWeight: "600"}}>{"Danceability"}</div>
-              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>{"75"}</div>
+              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>{"Danceability"}</div>
+              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
+                {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["danceability"]) * 100)}
+              </div>
             </div>
             <div className={styles.graphicContainer}>
-              {/* <div style={{width: "70px", height: "70px", borderRadius: "35px", backgroundColor: "white"}}></div> */}
+              <CircularProgressbar styles={{path: {stroke: "white"}, trail: {stroke: "rgb(80,80,80)"}}} value={parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["danceability"])} maxValue={1}></CircularProgressbar>
             </div>
           </div>
           {/* Statistic #2 */}
           <div className={styles.statContainer}>
             <div className={styles.statTextContainer}>
-              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(180,180,180)", fontWeight: "600"}}>{"Energy"}</div>
-              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>{"55"}</div>
+              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>{"Energy"}</div>
+              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
+                {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["energy"]) * 100)}
+              </div>
             </div>
             <div className={styles.graphicContainer}>
-              {/* <div style={{width: "70px", height: "70px", borderRadius: "35px", backgroundColor: "white"}}></div> */}
+            <CircularProgressbar styles={{path: {stroke: "white"}, trail: {stroke: "rgb(80,80,80)"}}} value={parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["energy"])} maxValue={1}></CircularProgressbar>
             </div>
           </div>
           {/* Statistic #3 */}
           <div className={styles.statContainer}>
             <div className={styles.statTextContainer}>
-              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(180,180,180)", fontWeight: "600"}}>{"Acousticness"}</div>
-              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>{"65"}</div>
+              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>{"Acousticness"}</div>
+              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
+                {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["acousticness"]) * 100)}
+              </div>
             </div>
             <div className={styles.graphicContainer}>
-              {/* <div style={{width: "70px", height: "70px", borderRadius: "35px", backgroundColor: "white"}}></div> */}
+            <CircularProgressbar styles={{path: {stroke: "white"}, trail: {stroke: "rgb(80,80,80)"}}} value={parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["acousticness"])} maxValue={1}></CircularProgressbar>
             </div>
           </div>
           {/* Statistic #4 */}
           <div className={styles.statContainer}> 
             <div className={styles.statTextContainer}>
-              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(180,180,180)", fontWeight: "600"}}>{"Loudness"}</div>
-              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>{"85"}</div>
+              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>{"Loudness"}</div>
+              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
+                {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["loudness"]))}
+                <span className={styles.text} style={{fontSize: "25px", color: "white", fontWeight: "550", marginLeft: "5px"}}>
+                  {"dB"}
+                </span>
+                </div>
             </div>
             <div className={styles.graphicContainer}>
               {/* <div style={{width: "70px", height: "70px", borderRadius: "35px", backgroundColor: "white"}}></div> */}
@@ -218,8 +477,8 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           {/* Statistic #5 */}
           <div className={styles.statContainer}>
             <div className={styles.statTextContainer}>
-              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(180,180,180)", fontWeight: "600"}}>{"Key"}</div>
-              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>{"95"}</div>
+              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>{"Key"}</div>
+              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>{(this.state.audioFeatures as AudioFeaturesResponse)["key"]}</div>
             </div>
             <div className={styles.graphicContainer}>
               {/* <div style={{width: "70px", height: "70px", borderRadius: "35px", backgroundColor: "white"}}></div> */}
@@ -228,8 +487,10 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           {/* Statistic #6 */}
           <div className={styles.statContainer}> 
             <div className={styles.statTextContainer}>
-              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(180,180,180)", fontWeight: "600"}}>{"Tempo"}</div>
-              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>{"65"}</div>
+              <div className={styles.text + styles.statLabel} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>{"Tempo"}</div>
+              <div className={styles.text + styles.statValue} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
+              {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["tempo"]))}
+                </div>
             </div>
             <div className={styles.graphicContainer}>
               {/* <div style={{width: "70px", height: "70px", borderRadius: "35px", backgroundColor: "white"}}></div> */}
