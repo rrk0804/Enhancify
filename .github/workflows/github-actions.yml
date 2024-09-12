@@ -39,3 +39,7 @@ jobs:
         echo $PATH
         npm install
         npm run build
+
+    - name: run unit tests
+      run: |
+        npm run test
