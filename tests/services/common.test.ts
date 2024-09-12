@@ -1,4 +1,4 @@
-import getID from './../../src/services/common';
+import getID from '../../src/services/common';
 
 describe('getID', () => {
   it('gets the ID from a Spotify URI', () => {

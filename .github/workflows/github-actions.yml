@@ -42,4 +42,4 @@ jobs:
 
     - name: run unit tests
       run: |
-        jest tests/services
+        npm run test

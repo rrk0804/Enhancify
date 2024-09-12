@@ -5,7 +5,8 @@
   "scripts": {
     "build": "spicetify-creator",
     "build-local": "spicetify-creator --out=dist --minify",
-    "watch": "spicetify-creator --watch"
+    "watch": "spicetify-creator --watch",
+    "test": "jest tests"
   },
   "license": "MIT",
   "devDependencies": {
@@ -17,6 +18,7 @@
   "dependencies": {
     "@spotify/web-api-ts-sdk": "^1.2.0",
     "@testing-library/react": "^16.0.1",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5"
   }
 }
