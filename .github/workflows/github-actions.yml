@@ -43,3 +43,7 @@ jobs:
     - name: run unit tests
       run: |
         npm run test
+    
+    - name: run ESLint
+        run: |
+          npx eslint .
