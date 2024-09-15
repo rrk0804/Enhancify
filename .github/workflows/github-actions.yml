@@ -45,5 +45,5 @@ jobs:
         npm run test
     
     - name: run ESLint
-        run: |
-          npx eslint .
+      run: |
+        npx eslint .
