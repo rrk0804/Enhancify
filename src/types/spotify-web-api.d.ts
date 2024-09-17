@@ -21,7 +21,7 @@ export type AudioFeaturesResponse = {
 
 export class GetRecommendationsInput {
   data = {
-    limit: "1",
+    limit: "6",
     market: "",
     seed_artists: "",
     seed_genres: "",
@@ -72,7 +72,7 @@ export class GetRecommendationsInput {
 };
 
 export type GetRecommendationsResponse = {
-  seeds: [
+  seeds:
     {
       afterFilteringSize: number,
       afterRelinkingSize: number,
@@ -80,9 +80,8 @@ export type GetRecommendationsResponse = {
       id: string,
       initialPoolSize: number,
       type: string
-    }
-  ],
-  tracks: [
+    }[],
+  tracks:
     {
       album: {
         album_type: string,
@@ -93,13 +92,12 @@ export type GetRecommendationsResponse = {
         },
         href: string,
         id: string,
-        images: [
+        images:
           {
             url: string,
             height: number,
             width: number,
-          }
-        ],
+          }[],
         name: string,
         release_date: string,
         release_date_precision: string,
@@ -108,7 +106,7 @@ export type GetRecommendationsResponse = {
         },
         type: string,
         uri: string,
-        artists: [
+        artists:
           {
             external_urls: {
               spotify: string
@@ -118,10 +116,9 @@ export type GetRecommendationsResponse = {
             name: string,
             type: string,
             uri: string
-          }
-        ]
+          }[]
       },
-      artists: [
+      artists:
         {
           external_urls: {
             spotify: string
@@ -131,11 +128,9 @@ export type GetRecommendationsResponse = {
           name: string,
           type: string,
           uri: string
-        }
-      ],
-      available_markets: [
-        string
-      ],
+        }[],
+      available_markets:
+        string[],
       disc_number: number,
       duration_ms: number,
       explicit: boolean,
@@ -161,6 +156,5 @@ export type GetRecommendationsResponse = {
       type: string,
       uri: string,
       is_local: boolean
-    }
-  ]
-}
+    }[]
+};
