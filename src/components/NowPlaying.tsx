@@ -7,18 +7,12 @@ import 'react-circular-progressbar/dist/styles.css';
 import getRecommendations from "../services/dynamicRecommendationsService";
 import { GetRecommendationsInput, GetRecommendationsResponse } from "../types/spotify-web-api.d";
 
-// All components are now classes
-// Extends means that the class is inheriting all the properties of a React component
-// The component does not accept any props because it does not take anything in. The second 
-// object describes the state of the component, which contains audioFeatures and songURI. Each 
-// state variable must be typed.
+
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
                                               songURI: string, 
                                               queue: Array<string>, 
                                               recommendations: GetRecommendationsResponse | {}}> {
   
-  // The component has two states: one for holding the features 
-  // of the audio and another for holding the song's URI
   state = {
     audioFeatures: {},
     songURI: "",
@@ -27,14 +21,11 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     recommendations: {},
   }
 
-  // After the component is mounted to the screen, make API 
-  // calls to get the features of the currenly playing song
   componentDidMount = () => {
     this.setAudioFeatures();
     this.generateRecommendations();
   }
   
-  // Function for updating the audio features of the song
   setAudioFeatures = () => {
     if (!Spicetify.Player.data || this.state.songURI == Spicetify.Player.data.item.uri) {
 
@@ -89,17 +80,59 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   }
   
   playIcon = <img className={styles.playIcon} src={"https://img.icons8.com/?size=100&id=36067&format=png&color=FFFFFF"}/>;
+  recommendationIndexes = Array.from(Array(6).keys());
+  recommendationItem = (i : number) =>
+                        (<div className={styles.trackContainer}>
+                          {/* Recommendation cover */}
+                          <img className={styles.recommendationsCover} src={Object.keys(this.state.recommendations).length > 0 ? 
+                                                                              (this.state.recommendations as GetRecommendationsResponse)["tracks"][i].album.images[0].url : 
+                                                                            ""}/>
+                          {/* Recommendation track details */}
+                          <div className={styles.trackDetils}>
+                            <div className={styles.trackName}>
+                              {Object.keys(this.state.recommendations).length > 0 ? 
+                                (this.state.recommendations as GetRecommendationsResponse)["tracks"][i].name : 
+                              ""}
+                            </div>
+                              {Object.keys(this.state.recommendations).length > 0 ? ( () => {
+                                // Get all the artists
+                                const trackArtists = (this.state.recommendations as GetRecommendationsResponse)["tracks"][i].artists;
+                                let trackAritistsInnnerHTML = "";
 
+                                // Check if there are any artists
+                                if (trackArtists) {
+                                  // Display all the artists
+                                  for (const artist of trackArtists) {
+                                    trackAritistsInnnerHTML += (artist.name + ", ")
+                                  }
+                                  if(trackAritistsInnnerHTML.length > 0) {
+                                    trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
+                                  }
+
+                                  return (<div className={styles.text}> 
+                                            {trackAritistsInnnerHTML} 
+                                          </div>);
+                                } else {
+                                  return <></>;
+                                }
+
+                                })() : <div></div>}
+                            <div>
+                            {Object.keys(this.state.recommendations).length > 0 ? 
+                                (this.state.recommendations as GetRecommendationsResponse)["tracks"][i].album.name : 
+                            ""}
+                            </div>
+                          </div>
+                          {/* Play icon */}
+                          {this.playIcon}
+                        </div>);
+    recommendationItems = this.recommendationIndexes.map((i) => this.recommendationItem(i));
 
   render() {
-    // Add an event listener for when the song is changed
     Spicetify.Player.addEventListener("songchange", this.setAudioFeatures);
     Spicetify.Player.addEventListener("onprogress", this.addToQueue);
     return (
       <>
-        {/* <text className={styles.text}>
-          {JSON.stringify(this.state.audioFeatures)}
-        </text> */}
         <div className={styles.topBar}>
           {/* Now playing rectangle sidebar */}
           <div className={styles.nowPlayingSidebar}>
@@ -421,6 +454,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
             </div>
           </div>
         </div>
+        
         {/* Stats block */}
         <div className={styles.statsBlock}>
           {/* Statistic #1 */}
