@@ -2,8 +2,6 @@ import styles from "../css/app.module.scss";
 import React from "react";
 import getAudioFeatures from "../services/nowPlayingService";
 import { AudioFeaturesResponse } from "../types/spotify-web-api";
-import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
 import DynamicRecommendations from "./DynamicRecommendations";
 import SongMetric from "./SongMetric";
 import { SongMetricData } from "../types/enhancify";
@@ -151,10 +149,12 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           {"Song Statistics"}
         </div>
         <div className={styles.statsBlock}>
+
           {/* Stats block data */}
           {this.state.songMetrics.map((songMetric: SongMetricData, i) => {
             return <SongMetric title={songMetric.title} floatValue={songMetric.floatValue} label={songMetric.label} progressBar={songMetric.progressBar} />;
           })}
+
         </div>
         <div>
           <div className={styles.recommendationsLabel} style={{marginLeft: "20px",
