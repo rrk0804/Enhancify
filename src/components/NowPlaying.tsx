@@ -4,8 +4,6 @@ import getAudioFeatures from "../services/nowPlayingService";
 import { AudioFeaturesResponse } from "../types/spotify-web-api";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import getRecommendations from "../services/dynamicRecommendationsService";
-import { GetRecommendationsInput, GetRecommendationsResponse } from "../types/spotify-web-api.d";
 import DynamicRecommendations from "./DynamicRecommendations";
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
@@ -16,9 +14,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     audioFeatures: {},  // Features of the currently playing song (name, artist, stats)
     songURI: "",        // URI of the currently playing song
     recTarget: "songs", // Recommendations based on either songs or artist
-    // songPlayerInfo: {},
-    // queue: Spicetify.LocalStorage.get("queue")?.split(',') || new Array<string>,
-    // recommendations: {},
   }
 
   componentDidMount = () => {
@@ -232,7 +227,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
               {"Settings"}</div>
           <div className={styles.settingContainer}>
             <span className={styles.settingLabel}>{"Show recommendations by: "}</span>
-            {/* <span style={{flexGrow: "1"}}></span> */}
             <button onClick={this.changeRecTarget} className={styles.recommendationTarget}
                     disabled={false} style={{marginLeft: "10px", marginTop: "0px"}}> 
               {this.state.recTarget} 

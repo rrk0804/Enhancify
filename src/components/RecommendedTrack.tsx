@@ -1,5 +1,5 @@
 import styles from "../css/app.module.scss";
-import React, { ReactNode } from "react"; 
+import React from "react"; 
 
 class RecommendedTrack extends React.Component<{songCover: string, 
                                                 songName: string, 
