@@ -16,6 +16,7 @@ export function getSongMetrics(audioFeatures: AudioFeaturesResponse, metricsToDi
 }
 
 // Object that represents which metrics require a progress bar and which metrics require a specific label
+// TODO: Add information for other metrics that we can show the user
 const metricFeatures: MetricFeatures = {
   progressbar: new Set(["Danceability", "Energy", "Acousticness"]),
   label: {
