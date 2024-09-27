@@ -5,6 +5,7 @@ import { AudioFeaturesResponse } from "../types/spotify-web-api";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import DynamicRecommendations from "./DynamicRecommendations";
+import SongMetric from "./SongMetric";
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
                                               songURI: string, 
@@ -135,89 +136,22 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
         </div>
         <div className={styles.statsBlock}>
           {/* Statistic #1 */}
-          <div className={styles.statContainer}>
-            <div className={styles.statTextContainer}>
-              <div className={styles.text} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>
-                {"Danceability"}
-              </div>
-              <div className={styles.text} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
-                {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["danceability"]) * 100)}
-              </div>
-            </div>
-            <div className={styles.graphicContainer}>
-              <CircularProgressbar styles={{path: {stroke: "white"}, trail: {stroke: "rgb(80,80,80)"}}} 
-                                   value={parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["danceability"])} maxValue={1}>
-              </CircularProgressbar>
-            </div>
-          </div>
+          <SongMetric title="Danceability" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["danceability"]} label="" progressBar={true} />
+
           {/* Statistic #2 */}
-          <div className={styles.statContainer}>
-            <div className={styles.statTextContainer}>
-              <div className={styles.text} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>
-                {"Energy"}
-              </div>
-              <div className={styles.text} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
-                {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["energy"]) * 100)}
-              </div>
-            </div>
-            <div className={styles.graphicContainer}>
-              <CircularProgressbar styles={{path: {stroke: "white"}, trail: {stroke: "rgb(80,80,80)"}}} 
-                                   value={parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["energy"])} maxValue={1}>
-              </CircularProgressbar>
-            </div>
-          </div>
+          <SongMetric title="Energy" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["energy"]} label="" progressBar={true} />
+
           {/* Statistic #3 */}
-          <div className={styles.statContainer}>
-            <div className={styles.statTextContainer}>
-              <div className={styles.text} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>
-                {"Acousticness"}
-              </div>
-              <div className={styles.text} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
-                {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["acousticness"]) * 100)}
-              </div>
-            </div>
-            <div className={styles.graphicContainer}>
-              <CircularProgressbar styles={{path: {stroke: "white"}, trail: {stroke: "rgb(80,80,80)"}}} 
-                                   value={parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["acousticness"])} maxValue={1}>
-              </CircularProgressbar>
-            </div>
-          </div>
+          <SongMetric title="Acousticness" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["acousticness"]} label="" progressBar={true} />
+
           {/* Statistic #4 */}
-          <div className={styles.statContainer}> 
-            <div className={styles.statTextContainer}>
-              <div className={styles.text} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>
-                {"Loudness"}
-              </div>
-              <div className={styles.text} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
-                {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["loudness"]))}
-                <span className={styles.text} style={{fontSize: "25px", color: "white", fontWeight: "550", marginLeft: "5px"}}>
-                  {"dB"}
-                </span>
-              </div>
-            </div>
-          </div>
+          <SongMetric title="Loudness" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["loudness"]} label="dB" progressBar={false} />
+
           {/* Statistic #5 */}
-          <div className={styles.statContainer}>
-            <div className={styles.statTextContainer}>
-              <div className={styles.text} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>
-                {"Key"}
-              </div>
-              <div className={styles.text} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
-                {(this.state.audioFeatures as AudioFeaturesResponse)["key"]}
-              </div>
-            </div>
-          </div>
+          <SongMetric title="Key" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["key"]} label="" progressBar={false} />
+
           {/* Statistic #6 */}
-          <div className={styles.statContainer}> 
-            <div className={styles.statTextContainer}>
-              <div className={styles.text} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>
-                {"Tempo"}
-              </div>
-              <div className={styles.text} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
-                {Math.round(parseFloat((this.state.audioFeatures as AudioFeaturesResponse)["tempo"]))}
-              </div>
-            </div>
-          </div>
+          <SongMetric title="Tempo" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["tempo"]} label="" progressBar={false} />
         </div>
         <div>
           <div className={styles.recommendationsLabel} style={{marginLeft: "20px",
