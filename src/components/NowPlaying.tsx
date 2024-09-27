@@ -17,8 +17,8 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     audioFeatures: {},  // Features of the currently playing song (name, artist, stats)
     songURI: "",        // URI of the currently playing song
     recTarget: "songs", // Recommendations based on either songs or artist
-    songMetrics: [],
-    metricsToDisplay: [],
+    songMetrics: [], // Current song metric information
+    metricsToDisplay: [], // Current metric information types
   }
 
   componentDidMount = () => {
@@ -47,9 +47,10 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     apiCall();
   }
 
+  // Sets the song metric information based on the type of information that the user wants to be displayed
   setSongMetrics = () => {
     this.setState({
-      metricsToDisplay: ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"]
+      metricsToDisplay: ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"] // TODO: Change so that we get the metrics we want to display dynamically
     }, () => {
       this.setState({
         songMetrics: getSongMetrics((this.state.audioFeatures as AudioFeaturesResponse), this.state.metricsToDisplay)

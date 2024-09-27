@@ -3,6 +3,7 @@ import React from "react";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+// Component for each individual song metric data block
 class SongMetric extends React.Component<{floatValue: string, 
                                                 title: string, 
                                                 progressBar: boolean, 
@@ -18,6 +19,8 @@ class SongMetric extends React.Component<{floatValue: string,
               </div>
               <div className={styles.text} style={{fontSize: "48px", color: "white", fontWeight: "500"}}>
                 {Math.round(parseFloat(this.props.floatValue) * (this.props.progressBar ? 100 : 1))}
+
+                {/* Label represents the unit (something like dB, bpm, etc.) */}
                 { this.props.label != "" ?
                   <span className={styles.text} style={{fontSize: "25px", color: "white", fontWeight: "550", marginLeft: "5px"}}>
                     {this.props.label}
