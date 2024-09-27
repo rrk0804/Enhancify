@@ -7,6 +7,7 @@ export type SongMetricData = {
 
 export type Labels = {
   Loudness: string
+  Tempo: string
 }
 
 export type MetricFeatures = {
