@@ -151,27 +151,10 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           {"Song Statistics"}
         </div>
         <div className={styles.statsBlock}>
+          {/* Stats block data */}
           {this.state.songMetrics.map((songMetric: SongMetricData, i) => {
             return <SongMetric title={songMetric.title} floatValue={songMetric.floatValue} label={songMetric.label} progressBar={songMetric.progressBar} />;
           })}
-
-          {/* Statistic #1 */}
-          {/* <SongMetric title="Danceability" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["danceability"]} label="" progressBar={true} /> */}
-
-          {/* Statistic #2 */}
-          {/* <SongMetric title="Energy" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["energy"]} label="" progressBar={true} /> */}
-
-          {/* Statistic #3 */}
-          {/* <SongMetric title="Acousticness" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["acousticness"]} label="" progressBar={true} /> */}
-
-          {/* Statistic #4 */}
-          {/* <SongMetric title="Loudness" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["loudness"]} label="dB" progressBar={false} /> */}
-
-          {/* Statistic #5 */}
-          {/* <SongMetric title="Key" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["key"]} label="" progressBar={false} /> */}
-
-          {/* Statistic #6 */}
-          {/* <SongMetric title="Tempo" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["tempo"]} label="" progressBar={false} /> */}
         </div>
         <div>
           <div className={styles.recommendationsLabel} style={{marginLeft: "20px",
