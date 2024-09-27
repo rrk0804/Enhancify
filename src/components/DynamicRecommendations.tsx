@@ -154,12 +154,16 @@ class DynamicRecommendations extends React.Component<{recTargetProp : string}, {
           </div>
           <div className={styles.recommendationsBlock}>
             {function(recommendations : GetRecommendationsResponse | {}) {
+              if (Object.keys(recommendations).length == 0) {
+                return;
+              }
+              let recs = (recommendations as GetRecommendationsResponse)["tracks"];
               let recommendedTracksHTML = [];
               for (let i = 0; i < 6; i++) {
-                let recommendedSong = <RecommendedTrack songCover={Object.keys(recommendations).length > 0 ? (recommendations as GetRecommendationsResponse)["tracks"][i].album.images[0].url : ""}
-                                                        songAlbum={Object.keys(recommendations).length > 0 ? (recommendations as GetRecommendationsResponse)["tracks"][i].album.name : ""}
-                                                        songName={Object.keys(recommendations).length > 0 ? (recommendations as GetRecommendationsResponse)["tracks"][i].name : ""}
-                                                        songArtists={Object.keys(recommendations).length > 0 ? (recommendations as GetRecommendationsResponse)["tracks"][i].artists.map((artist) => artist.name):[]}
+                let recommendedSong = <RecommendedTrack songCover={recs[i].album.images[0].url}
+                                                        songAlbum={recs[i].album.name}
+                                                        songName={recs[i].name}
+                                                        songArtists={recs[i].artists.map((artist) => artist.name)}
                                                         key={i}>
                                       </RecommendedTrack>;
                 recommendedTracksHTML.push(recommendedSong);
