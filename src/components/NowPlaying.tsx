@@ -5,7 +5,7 @@ import { AudioFeaturesResponse } from "../types/spotify-web-api";
 import DynamicRecommendations from "./DynamicRecommendations";
 import SongMetric from "./SongMetric";
 import { SongMetricData } from "../types/enhancify";
-import { getSongMetrics } from "../services/common";
+import { getSongMetrics } from "../services/enhancifyInternalService";
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
                                               songURI: string, 
