@@ -80,65 +80,67 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
       <> 
         <div className={styles.topBar}>
           <div className={styles.nowPlayingSidebar}>
-            <div className={styles.trackInfoPrimary}>
-              {/* Track cover */}
-              {Spicetify.Player.data.item.images ? 
-                Spicetify.Player.data.item.images.length > 0 ? 
-                  <img src={Spicetify.Player.data.item.images[0].url} className={styles.trackCover}/> 
-                : <></> 
-              : <></>}
+            {Spicetify.Player.data ? 
+              <div className={styles.trackInfoPrimary}>
+                {/* Track cover */}
+                {Spicetify.Player.data.item.images ? 
+                  Spicetify.Player.data.item.images.length > 0 ? 
+                    <img src={Spicetify.Player.data.item.images[0].url} className={styles.trackCover}/> 
+                  : <></> 
+                : <></>}
 
-              {/* Track title */}
-              <text className={styles.text} style={{marginTop: "5px", 
-                                                    fontSize: "30px",
-                                                    fontWeight: "530",
-                                                    textOverflow: "ellipsis",
-                                                    overflow: "hidden", 
-                                                    whiteSpace: "nowrap",
-                                                    textAlign: "center",
-                                                    alignContent: "center",
-                                                    width: "250px",
-                                                    color: "white"}}>
-                {Spicetify.Player.data.item.name}
-              </text>
+                {/* Track title */}
+                <text className={styles.text} style={{marginTop: "5px", 
+                                                      fontSize: "30px",
+                                                      fontWeight: "530",
+                                                      textOverflow: "ellipsis",
+                                                      overflow: "hidden", 
+                                                      whiteSpace: "nowrap",
+                                                      textAlign: "center",
+                                                      alignContent: "center",
+                                                      width: "250px",
+                                                      color: "white"}}>
+                  {Spicetify.Player.data.item.name}
+                </text>
 
-              {/* Track artist(s) */}
-              {(function () {
+                {/* Track artist(s) */}
+                {(function () {
 
-                // Get all the artists
-                const trackArtists = Spicetify.Player.data.item.artists;
-                let trackAritistsInnnerHTML = "";
+                  // Get all the artists
+                  const trackArtists = Spicetify.Player.data.item.artists;
+                  let trackAritistsInnnerHTML = "";
 
-                // Check if there are any artists
-                if (trackArtists) {
-                  // Display all the artists
-                  for (const artist of trackArtists) {
-                    trackAritistsInnnerHTML += (artist.name + ", ")
+                  // Check if there are any artists
+                  if (trackArtists) {
+                    // Display all the artists
+                    for (const artist of trackArtists) {
+                      trackAritistsInnnerHTML += (artist.name + ", ")
+                    }
+                    if(trackAritistsInnnerHTML.length > 0) {
+                      trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
+                    }
+
+                    return <text className={styles.text} style={{fontSize: "15px", 
+                                                                marginBottom: "2px",
+                                                                textOverflow: "ellipsis",
+                                                                width: "250px",
+                                                                textAlign: "center",}}> 
+                              {trackAritistsInnnerHTML} 
+                            </text>
+                  } else {
+                    return <></>;
                   }
-                  if(trackAritistsInnnerHTML.length > 0) {
-                    trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
-                  }
+                })()}
 
-                  return <text className={styles.text} style={{fontSize: "15px", 
-                                                              marginBottom: "2px",
-                                                              textOverflow: "ellipsis",
-                                                              width: "250px",
-                                                              textAlign: "center",}}> 
-                            {trackAritistsInnnerHTML} 
-                          </text>
-                } else {
-                  return <></>;
-                }
-              })()}
-
-              {/* Track album */}
-              <text className={styles.text} style={{fontSize: "15px", 
-                                                    textOverflow: "ellipsis", 
-                                                    width: "250px",
-                                                    textAlign: "center",}}>
-                {Spicetify.Player.data.item.album.name}
-              </text>
-            </div>
+                {/* Track album */}
+                <text className={styles.text} style={{fontSize: "15px", 
+                                                      textOverflow: "ellipsis", 
+                                                      width: "250px",
+                                                      textAlign: "center",}}>
+                  {Spicetify.Player.data.item.album.name}
+                </text>
+              </div>
+            : <></>}
           </div>
           <div style={{display: "flex", flexDirection: "row"}}>
             <DynamicRecommendations recTargetProp={this.state.recTarget}></DynamicRecommendations>
