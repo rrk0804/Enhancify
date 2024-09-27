@@ -3,9 +3,21 @@
   word-wrap: break-word;
 }
 
+.topBar {
+  display: flex;
+  flex-direction: row;
+}
+
+.nowPlayingSidebar {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .trackInfoPrimary {
   width: 280px;
-  margin-top: 25px;
+  margin-top: 35px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,31 +30,15 @@
   height: 250px;
 }
 
-.nowPlayingSidebar {
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .statsBlock {
   width: 96.5%;
   height: 290px;
   margin-top: 40px;
   margin: 20px;
+  margin-right: 0px;
   margin-bottom: 0px;
+  margin-left: 0px;
   border-radius: 5px;
-}
-
-.topBar {
-  display: flex;
-  flex-direction: row;
-}
-
-.recommendationsBlock {
-  width: 70%;
-  border-radius: 5px;
-  margin-top: 8px;
 }
 
 .statsBlock {
@@ -52,6 +48,8 @@
   row-gap: 10px;
   column-gap: 10px;
   padding: 10px;
+  padding-right: 0px;
+  padding-top: 0px;
 }
 
 .statContainer {
@@ -69,15 +67,6 @@
   font-size: larger;
 }
 
-.recommendationsBlock {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  row-gap: 20px;
-  column-gap: 20px;
-  padding: 20px;
-}
-
 .statLabel {
   font-weight: 600;
 }
@@ -91,6 +80,25 @@
   justify-content: flex-end;
   align-self: center;
   margin-left: auto;
+  width: 100px;
+  height: 100px;
+}
+
+.recommendationsSection {
+  width: 750px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.recommendationsBlock {
+  border-radius: 5px;
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  row-gap: 20px;
+  column-gap: 20px;
 }
 
 .trackContainer {
@@ -109,9 +117,9 @@
 }
 
 .trackName {
-  color: white;
-  font-size: 20px;
-  font-weight: 600;
+  width: 120px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .playIcon {
@@ -119,4 +127,124 @@
   height: 40px;
   margin-left: auto;
   align-self: center;
+}
+
+.changeRecTragetBtn {
+  border-radius: 10px;
+  font-size: large;
+  padding: 10px;
+  background-color: rgb(81, 126, 97);
+  color: white;
+}
+
+.trackNameText {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+  position: relative;
+  display: inline-block;
+  transition-delay: 2s;
+  transition-property: right;
+}
+
+.leftSideBar {
+  display: flex;
+  flex-direction: column;
+}
+
+// .scrollTitle {
+//   -webkit-animation: linear infinite;
+//   -webkit-animation-name: run;
+//   -webkit-animation-duration: 5s;
+//   animation: linear infinite;
+//   animation-name: run;
+//   animation-duration: 5s;
+// }
+
+.scrollTitle {
+  animation: scrollText 10s infinite linear;
+  animation-delay: 10s;
+}
+
+@keyframes scrollText {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@-webkit-keyframes run {
+  0% {
+    right: 0;
+  }
+  50% {
+    right: 100%;
+  }
+  100% {
+    right: -2%;    
+  }
+}
+
+@keyframes run {
+  0% {
+    right: 0;
+  }
+  50% {
+    right: 100%;
+  }
+  100% {
+    right: -2%;    
+  }
+}
+
+.recommendationsLabel {
+  color: rgb(227, 227, 227);
+  font-size: 32px;
+  font-weight: 510;
+  margin-bottom: 10px;
+}
+
+.recommendationHeader {
+  display: flex;
+  align-items: center;
+}
+
+.recommendationTarget {
+  position: relative;
+  color: white;
+  font-weight: 600;
+  font-size: 20px;
+  text-align: center;
+  align-items: center;
+  height: auto;
+  background-color: rgb(81, 126, 97);
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 9px;
+  padding-top: 5px;
+  border-radius: 10px;
+  margin-top: 7px;
+}
+
+.recommendationsHeaderSpacer {
+  flex-grow: 1;
+  visibility: hidden;
+}
+
+.settingContainer {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20px;
+  padding-right: 30px;
+  align-items: center;
+}
+
+.settingLabel {
+  font-size: larger;
+  font-weight: 500;
+  color: white;
 }

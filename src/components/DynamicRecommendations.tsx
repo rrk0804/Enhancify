@@ -3,20 +3,26 @@ import React from "react";
 import getRecommendations from "../services/dynamicRecommendationsService";
 import { GetRecommendationsInput, GetRecommendationsResponse } from "../types/spotify-web-api.d";
 import getID from './../services/common';
+import RecommendedTrack from "./RecommendedTrack";
 
-class DynamicRecommendations extends React.Component<{}, {songQueue: Array<string>, artistQueue: Array<string>, recTarget: string, recommendations: GetRecommendationsResponse | {}}> {
+class DynamicRecommendations extends React.Component<{recTargetProp : string}, {songQueue: Array<string>, artistQueue: Array<string>, recTarget: string, recommendations: GetRecommendationsResponse | {}}> {
+  
   state = {
-    songQueue: Spicetify.LocalStorage.get("songQueue")?.split(',') || new Array<string>,
-    artistQueue: Spicetify.LocalStorage.get("artistQueue")?.split(',') || new Array<string>,
-    recTarget: "songs",
-    recommendations: {},
+    songQueue: Spicetify.LocalStorage.get("songQueue")?.split(',') || new Array<string>,     // Song in the queue
+    artistQueue: Spicetify.LocalStorage.get("artistQueue")?.split(',') || new Array<string>, // Artists in the queue
+    recTarget: this.props.recTargetProp,                                                     // Get recommendations based 
+                                                                                             // on songs or artists queue
+    recommendations: {},                                                                     // Recommendations list
   }
 
   componentDidMount = () => {
     this.generateRecommendations();
   }
 
+  // Generate recommendations by sending a request to the spotify API
   generateRecommendations = async () => {
+
+    // Prepare the recommendations to send to the server
     let apiOptions = new GetRecommendationsInput();
     if (this.state.recTarget == "songs") {
       apiOptions.data.seed_tracks = this.state.songQueue.toString();
@@ -24,13 +30,15 @@ class DynamicRecommendations extends React.Component<{}, {songQueue: Array<strin
     else if (this.state.recTarget == "artists") {
       apiOptions.data.seed_artists = this.state.artistQueue.toString(); 
     }
-
+    
+    // Make the API call
     var recommendations = await getRecommendations(apiOptions);
     this.setState({
       recommendations: recommendations,
     });
   };
   
+  // Add the current song and artist to the queue when the song is played half-way through
   addToQueue = (event?: Event & {data: number}) => {
     if (!event || !Spicetify.Player.data) {
       return;
@@ -41,10 +49,12 @@ class DynamicRecommendations extends React.Component<{}, {songQueue: Array<strin
       return;
     }
 
+    // Update the song and artist queue
     this.setSongQueue();
     this.setArtistQueue();
   };
 
+  // Add songs to the song queue
   setSongQueue = () => {
     let curSongID = getID(Spicetify.Player.data.item.uri);
     if (this.state.songQueue && this.state.songQueue[this.state.songQueue.length-1] == curSongID) {
@@ -74,6 +84,7 @@ class DynamicRecommendations extends React.Component<{}, {songQueue: Array<strin
     });
   };
 
+  
   shouldArtistQueueBeUpdated = (): boolean => {
     if (!Spicetify.Player.data.item.artists) {
       return false;
@@ -92,6 +103,7 @@ class DynamicRecommendations extends React.Component<{}, {songQueue: Array<strin
     return false;
   };
 
+  // Add artists to the queue
   setArtistQueue = () => {
     if (!Spicetify.Player.data.item.artists || !this.shouldArtistQueueBeUpdated()) {
       return;
@@ -123,31 +135,39 @@ class DynamicRecommendations extends React.Component<{}, {songQueue: Array<strin
     });
   };
 
-  changeRecTarget = () => {
-    if (this.state.recTarget == "songs") {
-      this.setState({
-        recTarget: "artists",
-      }, () => this.generateRecommendations());
+  componentDidUpdate(prevProps: Readonly<{ recTargetProp: string; }>, 
+                     prevState: Readonly<{ songQueue: Array<string>; artistQueue: Array<string>; recTarget: string; recommendations: GetRecommendationsResponse | {}; }>, snapshot?: any): void {
+    if (prevProps.recTargetProp != this.props.recTargetProp) {
+      this.generateRecommendations();
     }
-    else if (this.state.recTarget == "artists") {
-      this.setState({
-        recTarget: "songs",
-      }, () => this.generateRecommendations());
-    }
-  };
+  }
 
   render() {
     Spicetify.Player.addEventListener("onprogress", this.addToQueue);
     return (
       <>
-        <text className={styles.text}>
-          {"songQueue: " + String(this.state.songQueue) + "\n"}
-          {"artistQueue: " + String(this.state.artistQueue) + "\n"}
-          {JSON.stringify(Object.keys(this.state.recommendations).length != 0 ? (this.state.recommendations as GetRecommendationsResponse)["tracks"][0].name : {})}
-        </text>
-        <button onClick={this.changeRecTarget}>
-          {this.state.recTarget}
-        </button>
+        <div className={styles.recommendationsSection}>
+          <div className={styles.recommendationHeader}>
+            <div className={styles.recommendationsLabel} style={{marginTop: "10px"}}>{"Song Recommendations"}</div>
+            <div className={styles.recommendationsHeaderSpacer}></div>
+            <div className={styles.recommendationTarget}>{this.props.recTargetProp}</div>
+          </div>
+          <div className={styles.recommendationsBlock}>
+            {function(recommendations : GetRecommendationsResponse | {}) {
+              let recommendedTracksHTML = [];
+              for (let i = 0; i < 6; i++) {
+                let recommendedSong = <RecommendedTrack songCover={Object.keys(recommendations).length > 0 ? (recommendations as GetRecommendationsResponse)["tracks"][i].album.images[0].url : ""}
+                                                        songAlbum={Object.keys(recommendations).length > 0 ? (recommendations as GetRecommendationsResponse)["tracks"][i].album.name : ""}
+                                                        songName={Object.keys(recommendations).length > 0 ? (recommendations as GetRecommendationsResponse)["tracks"][i].name : ""}
+                                                        songArtists={Object.keys(recommendations).length > 0 ? (recommendations as GetRecommendationsResponse)["tracks"][i].artists.map((artist) => artist.name):[]}
+                                                        key={i}>
+                                      </RecommendedTrack>;
+                recommendedTracksHTML.push(recommendedSong);
+              }
+              return recommendedTracksHTML;
+            }(this.state.recommendations)}
+          </div>
+        </div>
       </>
     );
   }
