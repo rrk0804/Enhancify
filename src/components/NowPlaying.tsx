@@ -6,15 +6,21 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import DynamicRecommendations from "./DynamicRecommendations";
 import SongMetric from "./SongMetric";
+import { SongMetricData } from "../types/enhancify";
+import { getSongMetrics } from "../services/common";
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
                                               songURI: string, 
-                                              recTarget: string}> {
+                                              recTarget: string,
+                                              songMetrics: SongMetricData[],
+                                              metricsToDisplay: string[]}> {
   
   state = {
     audioFeatures: {},  // Features of the currently playing song (name, artist, stats)
     songURI: "",        // URI of the currently playing song
     recTarget: "songs", // Recommendations based on either songs or artist
+    songMetrics: [],
+    metricsToDisplay: [],
   }
 
   componentDidMount = () => {
@@ -36,11 +42,21 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
       const currentAudioFeatures = await getAudioFeatures(this.state.songURI || "");
       this.setState({
         audioFeatures: currentAudioFeatures,
-      });
+      }, this.setSongMetrics);
     }
 
     // Make the API call
     apiCall();
+  }
+
+  setSongMetrics = () => {
+    this.setState({
+      metricsToDisplay: ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"]
+    }, () => {
+      this.setState({
+        songMetrics: getSongMetrics((this.state.audioFeatures as AudioFeaturesResponse), this.state.metricsToDisplay)
+      });
+    })
   }
 
   // Change the recommendation target
@@ -135,23 +151,27 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           {"Song Statistics"}
         </div>
         <div className={styles.statsBlock}>
+          {this.state.songMetrics.map((songMetric: SongMetricData, i) => {
+            return <SongMetric title={songMetric.title} floatValue={songMetric.floatValue} label={songMetric.label} progressBar={songMetric.progressBar} />;
+          })}
+
           {/* Statistic #1 */}
-          <SongMetric title="Danceability" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["danceability"]} label="" progressBar={true} />
+          {/* <SongMetric title="Danceability" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["danceability"]} label="" progressBar={true} /> */}
 
           {/* Statistic #2 */}
-          <SongMetric title="Energy" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["energy"]} label="" progressBar={true} />
+          {/* <SongMetric title="Energy" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["energy"]} label="" progressBar={true} /> */}
 
           {/* Statistic #3 */}
-          <SongMetric title="Acousticness" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["acousticness"]} label="" progressBar={true} />
+          {/* <SongMetric title="Acousticness" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["acousticness"]} label="" progressBar={true} /> */}
 
           {/* Statistic #4 */}
-          <SongMetric title="Loudness" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["loudness"]} label="dB" progressBar={false} />
+          {/* <SongMetric title="Loudness" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["loudness"]} label="dB" progressBar={false} /> */}
 
           {/* Statistic #5 */}
-          <SongMetric title="Key" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["key"]} label="" progressBar={false} />
+          {/* <SongMetric title="Key" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["key"]} label="" progressBar={false} /> */}
 
           {/* Statistic #6 */}
-          <SongMetric title="Tempo" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["tempo"]} label="" progressBar={false} />
+          {/* <SongMetric title="Tempo" floatValue={(this.state.audioFeatures as AudioFeaturesResponse)["tempo"]} label="" progressBar={false} /> */}
         </div>
         <div>
           <div className={styles.recommendationsLabel} style={{marginLeft: "20px",
