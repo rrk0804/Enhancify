@@ -27,3 +27,5 @@ const metricFeatures: MetricFeatures = {
     Mode: "(0: Minor, 1: Major)",
   }
 };
+
+export const allMetrics: string[] = ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo", "Instrumentalness", "Liveness", "Mode", "Speechiness", "Time_Signature", "Valence"];

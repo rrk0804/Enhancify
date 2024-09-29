@@ -5,7 +5,7 @@ import { AudioFeaturesResponse } from "../types/spotify-web-api";
 import DynamicRecommendations from "./DynamicRecommendations";
 import SongMetric from "./SongMetric";
 import { SongMetricData } from "../types/enhancify";
-import { getSongMetrics } from "../services/enhancifyInternalService";
+import { allMetrics, getSongMetrics } from "../services/enhancifyInternalService";
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
                                               songURI: string, 
@@ -171,6 +171,16 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                     disabled={false} style={{marginLeft: "10px", marginTop: "0px"}}> 
               {this.state.recTarget} 
             </button>
+          </div>
+          <div className={styles.settingContainer}>
+            <span className={styles.settingLabel}>{"Displayed statistics: "}</span>
+            {allMetrics.map((metric: string, i) => {
+              return <button className={styles.recommendationTarget} style={{marginLeft: "5px", fontSize: "15px"}}>{metric}</button>
+            })}
+            {/* <button onClick={this.changeRecTarget} className={styles.recommendationTarget}
+                    disabled={false} style={{marginLeft: "10px", marginTop: "0px"}}> 
+              {this.state.recTarget} 
+            </button> */}
           </div>
         </div>
       </>
