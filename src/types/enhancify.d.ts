@@ -6,9 +6,12 @@ export type SongMetricData = {
 };
 
 export type Labels = {
-  Loudness: string
-  Tempo: string
-}
+  Loudness: string,
+  Tempo: string,
+  Time_Signature: string,
+  Key: string,
+  Mode: string
+};
 
 export type MetricFeatures = {
   progressbar: Set<string>,

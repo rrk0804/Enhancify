@@ -32,7 +32,6 @@
 
 .statsBlock {
   width: 96.5%;
-  height: 290px;
   margin-top: 40px;
   margin: 20px;
   margin-right: 0px;
@@ -44,7 +43,6 @@
 .statsBlock {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
   row-gap: 10px;
   column-gap: 10px;
   padding: 10px;

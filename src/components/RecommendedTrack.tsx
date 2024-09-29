@@ -4,10 +4,16 @@ import React from "react";
 class RecommendedTrack extends React.Component<{songCover: string, 
                                                 songName: string, 
                                                 songArtists: string[], 
-                                                songAlbum: string}, 
+                                                songAlbum: string,
+                                                songURI: string}, 
                                                 {paddingRight: string}>  {
 
-    playIcon = <img className={styles.playIcon} src={"https://img.icons8.com/?size=100&id=36067&format=png&color=FFFFFF"}/>;
+    // Plays the recommended song whose play icon has been clicked
+    playSong = () => {
+      Spicetify.Player.playUri(this.props.songURI);
+    }
+
+    playIcon = <img className={styles.playIcon} src={"https://img.icons8.com/?size=100&id=36067&format=png&color=FFFFFF"} onClick={this.playSong}/>;
     
     render() {
         return (
