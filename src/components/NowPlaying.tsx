@@ -18,7 +18,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     songURI: "",        // URI of the currently playing song
     recTarget: "songs", // Recommendations based on either songs or artist
     songMetrics: [], // Current song metric information
-    metricsToDisplay: ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"], // Current metric information types
+    metricsToDisplay: Spicetify.LocalStorage.get("metricsToDisplay") != "" ? Spicetify.LocalStorage.get("metricsToDisplay")?.split(',') || ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"] : [], // Current metric information types
   }
 
   componentDidMount = () => {
@@ -49,13 +49,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
 
   // Sets the song metric information based on the type of information that the user wants to be displayed
   setSongMetrics = () => {
-    // this.setState({
-    //   metricsToDisplay: ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo", "Instrumentalness", "Liveness", "Mode", "Speechiness", "Time_Signature", "Valence"] // TODO: Change so that we get the metrics we want to display dynamically
-    // }, () => {
-    //   this.setState({
-    //     songMetrics: getSongMetrics((this.state.audioFeatures as AudioFeaturesResponse), this.state.metricsToDisplay)
-    //   });
-    // })
     this.setState({
       songMetrics: getSongMetrics((this.state.audioFeatures as AudioFeaturesResponse), this.state.metricsToDisplay)
     });
@@ -76,16 +69,19 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   };
 
   toggleMetric = (metric: string) => {
-    if (this.state.metricsToDisplay.includes(metric)) {
-      this.setState({
-        metricsToDisplay: this.state.metricsToDisplay.filter((val) => val != metric)
-      }, this.setSongMetrics);
+    let newArray = this.state.metricsToDisplay.slice();
+    if (newArray.includes(metric)) {
+      newArray = newArray.filter((val) => val != metric);
     }
     else {
-      this.setState({
-        metricsToDisplay: [...this.state.metricsToDisplay, metric]
-      }, this.setSongMetrics);
+      newArray.push(metric);
     }
+
+    Spicetify.LocalStorage.set("metricsToDisplay", newArray.toString());
+
+    this.setState({
+      metricsToDisplay: newArray
+    }, this.setSongMetrics);
   }
 
   render() {
@@ -175,7 +171,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           })}
 
         </div>
-        <div style={{marginTop: String(Math.floor((this.state.songMetrics.length-4) / 3) * 120) + "px"}}>
+        <div>
           <div className={styles.recommendationsLabel} style={{marginLeft: "20px",
                                                                marginBottom: "0px",
                                                                marginTop: "10px",
@@ -193,10 +189,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
             {allMetrics.map((metric: string, i) => {
               return <button className={styles.recommendationTarget} style={{marginLeft: "5px", fontSize: "15px", backgroundColor: this.state.metricsToDisplay.includes(metric) ? "rgb(81, 126, 97)" : "rgb(105,105,105)"}} onClick={() => this.toggleMetric(metric)}>{metric}</button>
             })}
-            {/* <button onClick={this.changeRecTarget} className={styles.recommendationTarget}
-                    disabled={false} style={{marginLeft: "10px", marginTop: "0px"}}> 
-              {this.state.recTarget} 
-            </button> */}
           </div>
         </div>
       </>
