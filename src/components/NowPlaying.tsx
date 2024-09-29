@@ -68,6 +68,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     }
   };
 
+  // Toggles whether the metric that the user clicked on should be displayed or not
   toggleMetric = (metric: string) => {
     let newArray = this.state.metricsToDisplay.slice();
     if (newArray.includes(metric)) {

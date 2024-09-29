@@ -8,6 +8,7 @@ class RecommendedTrack extends React.Component<{songCover: string,
                                                 songURI: string}, 
                                                 {paddingRight: string}>  {
 
+    // Plays the recommended song whose play icon has been clicked
     playSong = () => {
       Spicetify.Player.playUri(this.props.songURI);
     }
