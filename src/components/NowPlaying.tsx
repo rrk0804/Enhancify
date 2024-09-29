@@ -50,7 +50,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   // Sets the song metric information based on the type of information that the user wants to be displayed
   setSongMetrics = () => {
     this.setState({
-      metricsToDisplay: ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"] // TODO: Change so that we get the metrics we want to display dynamically
+      metricsToDisplay: ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo", "Instrumentalness", "Liveness", "Mode", "Speechiness", "Time_Signature", "Valence"] // TODO: Change so that we get the metrics we want to display dynamically
     }, () => {
       this.setState({
         songMetrics: getSongMetrics((this.state.audioFeatures as AudioFeaturesResponse), this.state.metricsToDisplay)
@@ -159,7 +159,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           })}
 
         </div>
-        <div>
+        <div style={{marginTop: String(Math.floor(this.state.songMetrics.length / 3) * 60) + "px"}}>
           <div className={styles.recommendationsLabel} style={{marginLeft: "20px",
                                                                marginBottom: "0px",
                                                                marginTop: "10px",
@@ -170,7 +170,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
             <button onClick={this.changeRecTarget} className={styles.recommendationTarget}
                     disabled={false} style={{marginLeft: "10px", marginTop: "0px"}}> 
               {this.state.recTarget} 
-          </button>
+            </button>
           </div>
         </div>
       </>

@@ -164,6 +164,7 @@ class DynamicRecommendations extends React.Component<{recTargetProp : string}, {
                                                         songAlbum={recs[i].album.name}
                                                         songName={recs[i].name}
                                                         songArtists={recs[i].artists.map((artist) => artist.name)}
+                                                        songURI={recs[i].uri}
                                                         key={i}>
                                       </RecommendedTrack>;
                 recommendedTracksHTML.push(recommendedSong);

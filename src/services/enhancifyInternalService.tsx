@@ -18,9 +18,12 @@ export function getSongMetrics(audioFeatures: AudioFeaturesResponse, metricsToDi
 // Object that represents which metrics require a progress bar and which metrics require a specific label
 // TODO: Add information for other metrics that we can show the user
 const metricFeatures: MetricFeatures = {
-  progressbar: new Set(["Danceability", "Energy", "Acousticness"]),
+  progressbar: new Set(["Danceability", "Energy", "Acousticness", "Instrumentalness", "Speechiness", "Valence", "Liveness"]),
   label: {
     Loudness: "dB",
     Tempo: "bpm",
+    Time_Signature: "/4",
+    Key: "in Pitch Class notation",
+    Mode: "(0: Minor, 1: Major)",
   }
 };
