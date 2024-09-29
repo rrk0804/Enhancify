@@ -75,6 +75,19 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     }
   };
 
+  toggleMetric = (metric: string) => {
+    if (this.state.metricsToDisplay.includes(metric)) {
+      this.setState({
+        metricsToDisplay: this.state.metricsToDisplay.filter((val) => val != metric)
+      }, this.setSongMetrics);
+    }
+    else {
+      this.setState({
+        metricsToDisplay: [...this.state.metricsToDisplay, metric]
+      }, this.setSongMetrics);
+    }
+  }
+
   render() {
 
     Spicetify.Player.addEventListener("songchange", this.setAudioFeatures);
@@ -162,7 +175,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           })}
 
         </div>
-        <div style={{marginTop: String(Math.floor(this.state.songMetrics.length / 3) * 60) + "px"}}>
+        <div style={{marginTop: String(Math.floor((this.state.songMetrics.length-4) / 3) * 120) + "px"}}>
           <div className={styles.recommendationsLabel} style={{marginLeft: "20px",
                                                                marginBottom: "0px",
                                                                marginTop: "10px",
@@ -178,7 +191,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           <div className={styles.settingContainer}>
             <span className={styles.settingLabel}>{"Displayed statistics: "}</span>
             {allMetrics.map((metric: string, i) => {
-              return <button className={styles.recommendationTarget} style={{marginLeft: "5px", fontSize: "15px", backgroundColor: this.state.metricsToDisplay.includes(metric) ? "rgb(81, 126, 97)" : "rgb(105,105,105)"}}>{metric}</button>
+              return <button className={styles.recommendationTarget} style={{marginLeft: "5px", fontSize: "15px", backgroundColor: this.state.metricsToDisplay.includes(metric) ? "rgb(81, 126, 97)" : "rgb(105,105,105)"}} onClick={() => this.toggleMetric(metric)}>{metric}</button>
             })}
             {/* <button onClick={this.changeRecTarget} className={styles.recommendationTarget}
                     disabled={false} style={{marginLeft: "10px", marginTop: "0px"}}> 
