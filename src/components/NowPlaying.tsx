@@ -23,7 +23,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     songMetrics: [], // Current song metric information
     metricsToDisplay: Spicetify.LocalStorage.get("metricsToDisplay") != "" ? Spicetify.LocalStorage.get("metricsToDisplay")?.split(',') || ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"] : [], // Current metric information types
     modalIsOpen: false, // Whether the modal is currently open
-    selectedMetrics: JSON.parse(Spicetify.LocalStorage.get("selectedMetrics") || "{}"),
+    selectedMetrics: JSON.parse(Spicetify.LocalStorage.get("selectedMetrics") || "{}"), // Metrics that have been selected to be fed into the Spotify recommendations endpoint
   }
 
   componentDidMount = () => {
@@ -78,6 +78,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     if (newArray.includes(metric)) {
       newArray = newArray.filter((val) => val != metric);
 
+      // If a metric is being hidden from the display, it should not be fed into the recommendations endpoint
       if (metric in this.state.selectedMetrics) {
         let copy: SelectedMetrics = { ...this.state.selectedMetrics };
         delete copy[metric];
@@ -98,12 +99,14 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     }, this.setSongMetrics);
   }
 
+  // Set whether the modal should be open or closed
   setModalIsOpen = (value: boolean) => {
     this.setState({
       modalIsOpen: value
     });
   }
 
+  // Select a metric to toggle whether they should be included in the recommendations endpoint request or not
   selectMetric = (metric: string, value: string) => {
     let copy: SelectedMetrics = { ...this.state.selectedMetrics };
     if (metric in copy) {

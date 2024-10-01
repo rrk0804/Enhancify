@@ -3,6 +3,7 @@ import RecommendedTrack from "../components/RecommendedTrack";
 import { Labels, MetricFeatures, SongMetricData } from "../types/enhancify";
 import { AudioFeaturesResponse, GetRecommendationsResponse } from "../types/spotify-web-api";
 
+// Creates the recommended track view for any response from the Spotify recommendations endpoint
 export function RecommendationsRender(recommendations : GetRecommendationsResponse | {}) {
   if (Object.keys(recommendations).length == 0) {
     return;
