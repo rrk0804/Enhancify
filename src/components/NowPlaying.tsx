@@ -4,14 +4,17 @@ import getAudioFeatures from "../services/nowPlayingService";
 import { AudioFeaturesResponse } from "../types/spotify-web-api";
 import DynamicRecommendations from "./DynamicRecommendations";
 import SongMetric from "./SongMetric";
-import { SongMetricData } from "../types/enhancify";
+import { SelectedMetrics, SongMetricData } from "../types/enhancify";
 import { allMetrics, getSongMetrics } from "../services/enhancifyInternalService";
+import RecommendationsModal from "./RecommendationsModal";
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
                                               songURI: string, 
                                               recTarget: string,
                                               songMetrics: SongMetricData[],
-                                              metricsToDisplay: string[]}> {
+                                              metricsToDisplay: string[],
+                                              modalIsOpen: boolean,
+                                              selectedMetrics: SelectedMetrics}> {
   
   state = {
     audioFeatures: {},  // Features of the currently playing song (name, artist, stats)
@@ -19,6 +22,8 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     recTarget: "songs", // Recommendations based on either songs or artist
     songMetrics: [], // Current song metric information
     metricsToDisplay: Spicetify.LocalStorage.get("metricsToDisplay") != "" ? Spicetify.LocalStorage.get("metricsToDisplay")?.split(',') || ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"] : [], // Current metric information types
+    modalIsOpen: false, // Whether the modal is currently open
+    selectedMetrics: {},
   }
 
   componentDidMount = () => {
@@ -26,6 +31,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   }
   
   setAudioFeatures = () => {
+    this.setState({selectedMetrics: {}})
 
     // Check if there is no currently playing song or 
     // if the info of the song is currently being displayed
@@ -83,6 +89,19 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     this.setState({
       metricsToDisplay: newArray
     }, this.setSongMetrics);
+  }
+
+  setModalIsOpen = (value: boolean) => {
+    this.setState({
+      modalIsOpen: value
+    });
+  }
+
+  selectMetric = (metric: string, value: string) => {
+    (this.state.selectedMetrics as SelectedMetrics)[metric] = value;
+    this.setState({
+      selectedMetrics: this.state.selectedMetrics
+    });
   }
 
   render() {
@@ -164,11 +183,14 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
         <div className={styles.recommendationsLabel} style={{marginLeft: "20px", marginBottom: "0px"}}>
           {"Song Statistics"}
         </div>
+        <button className={styles.recommendationTarget} onClick={() => this.setState({modalIsOpen: true})}>
+          Show Current Song & Metric Recommendations
+        </button>
         <div className={styles.statsBlock}>
 
           {/* Stats block data */}
           {this.state.songMetrics.map((songMetric: SongMetricData, i) => {
-            return <SongMetric title={songMetric.title} floatValue={songMetric.floatValue} label={songMetric.label} progressBar={songMetric.progressBar} />;
+            return <SongMetric title={songMetric.title} floatValue={songMetric.floatValue} label={songMetric.label} progressBar={songMetric.progressBar} selectMetric={this.selectMetric}/>;
           })}
 
         </div>
@@ -192,6 +214,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
             })}
           </div>
         </div>
+        { this.state.modalIsOpen ? <RecommendationsModal modalIsOpen={this.state.modalIsOpen} setModalIsOpen={this.setModalIsOpen} songURI={this.state.songURI} selectedMetrics={this.state.selectedMetrics}></RecommendationsModal> : <></> }
       </>
     );
   }

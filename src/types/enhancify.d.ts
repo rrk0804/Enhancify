@@ -17,3 +17,7 @@ export type MetricFeatures = {
   progressbar: Set<string>,
   label: Labels
 };
+
+export type SelectedMetrics = {
+  [metric: string]: string
+};
