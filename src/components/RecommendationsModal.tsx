@@ -5,6 +5,7 @@ import { GetRecommendationsInput, GetRecommendationsResponse, RecommendationsInp
 import getRecommendations from "../services/dynamicRecommendationsService";
 import { SelectedMetrics } from "../types/enhancify";
 import getID from './../services/common';
+import { RecommendationsRender } from "../services/enhancifyInternalService";
 
 class RecommendationsModal extends React.Component<{modalIsOpen: boolean, setModalIsOpen: (value: boolean) => void, songURI: string, selectedMetrics: SelectedMetrics}, {recommendations: GetRecommendationsResponse | {}}> {
 
@@ -22,6 +23,7 @@ class RecommendationsModal extends React.Component<{modalIsOpen: boolean, setMod
     // Prepare the recommendations to send to the server
     let apiOptions = new GetRecommendationsInput();
     apiOptions.data.seed_tracks = getID(this.props.songURI);
+    apiOptions.data.limit = "10";
 
     for (let key in this.props.selectedMetrics) {
       let apiDataKey = "target_" + key.toLowerCase();
@@ -40,7 +42,7 @@ class RecommendationsModal extends React.Component<{modalIsOpen: boolean, setMod
       <Modal className={styles.modal} isOpen={this.props.modalIsOpen} onRequestClose={() => this.props.setModalIsOpen(false)}>
         <button onClick={() => this.props.setModalIsOpen(false)}>close</button>
         {JSON.stringify(this.props.selectedMetrics)}
-        {JSON.stringify(this.state.recommendations)}
+        {RecommendationsRender(this.state.recommendations)}
       </Modal>
     );
   }

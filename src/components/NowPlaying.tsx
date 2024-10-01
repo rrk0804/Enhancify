@@ -98,7 +98,12 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   }
 
   selectMetric = (metric: string, value: string) => {
-    (this.state.selectedMetrics as SelectedMetrics)[metric] = value;
+    if (metric in this.state.selectedMetrics) {
+      delete (this.state.selectedMetrics as SelectedMetrics)[metric];
+    }
+    else {
+      (this.state.selectedMetrics as SelectedMetrics)[metric] = value;
+    }
     this.setState({
       selectedMetrics: this.state.selectedMetrics
     });
