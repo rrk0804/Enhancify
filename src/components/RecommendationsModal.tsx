@@ -41,6 +41,8 @@ class RecommendationsModal extends React.Component<{modalIsOpen: boolean, setMod
     return (
       <Modal className={styles.modal} isOpen={this.props.modalIsOpen} onRequestClose={() => this.props.setModalIsOpen(false)}>
         <button onClick={() => this.props.setModalIsOpen(false)}>close</button>
+        {JSON.stringify(JSON.parse(Spicetify.LocalStorage.get("selectedMetrics") || "{}") as SelectedMetrics)}
+        {JSON.stringify(this.props.selectedMetrics)}
         {RecommendationsRender(this.state.recommendations)}
       </Modal>
     );

@@ -23,7 +23,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     songMetrics: [], // Current song metric information
     metricsToDisplay: Spicetify.LocalStorage.get("metricsToDisplay") != "" ? Spicetify.LocalStorage.get("metricsToDisplay")?.split(',') || ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"] : [], // Current metric information types
     modalIsOpen: false, // Whether the modal is currently open
-    selectedMetrics: {},
+    selectedMetrics: JSON.parse(Spicetify.LocalStorage.get("selectedMetrics") || "{}"),
   }
 
   componentDidMount = () => {
@@ -31,8 +31,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   }
   
   setAudioFeatures = () => {
-    this.setState({selectedMetrics: {}})
-
     // Check if there is no currently playing song or 
     // if the info of the song is currently being displayed
     if (!Spicetify.Player.data || this.state.songURI == Spicetify.Player.data.item.uri) {
@@ -79,6 +77,15 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     let newArray = this.state.metricsToDisplay.slice();
     if (newArray.includes(metric)) {
       newArray = newArray.filter((val) => val != metric);
+
+      if (metric in this.state.selectedMetrics) {
+        let copy: SelectedMetrics = { ...this.state.selectedMetrics };
+        delete copy[metric];
+        Spicetify.LocalStorage.set("selectedMetrics", JSON.stringify(copy));
+        this.setState({
+          selectedMetrics: copy
+        });
+      }
     }
     else {
       newArray.push(metric);
@@ -98,14 +105,16 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   }
 
   selectMetric = (metric: string, value: string) => {
-    if (metric in this.state.selectedMetrics) {
-      delete (this.state.selectedMetrics as SelectedMetrics)[metric];
+    let copy: SelectedMetrics = { ...this.state.selectedMetrics };
+    if (metric in copy) {
+      delete copy[metric];
     }
     else {
-      (this.state.selectedMetrics as SelectedMetrics)[metric] = value;
+      copy[metric] = value;
     }
+    Spicetify.LocalStorage.set("selectedMetrics", JSON.stringify(copy));
     this.setState({
-      selectedMetrics: this.state.selectedMetrics
+      selectedMetrics: copy
     });
   }
 
