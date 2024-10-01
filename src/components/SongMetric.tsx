@@ -8,12 +8,13 @@ class SongMetric extends React.Component<{floatValue: string,
                                                 title: string, 
                                                 progressBar: boolean, 
                                                 label: string,
-                                                selectMetric: (metric: string, value: string) => void}, 
+                                                selectMetric: (metric: string, value: string) => void
+                                                isMetricSelected: boolean}, 
                                                 {}>  {
     
     render() {
         return (
-          <div className={styles.statContainer} onClick={() => this.props.selectMetric(this.props.title, this.props.floatValue)}>
+          <div className={styles.statContainer} onClick={() => this.props.selectMetric(this.props.title, this.props.floatValue)} style={this.props.isMetricSelected ? {borderWidth: "5px", borderStyle: "solid", borderColor: "white"} : {}}>
             <div className={styles.statTextContainer}>
               <div className={styles.text} style={{fontSize: "23px", color: "rgb(200,200,200)", fontWeight: "600"}}>
                 {this.props.title}

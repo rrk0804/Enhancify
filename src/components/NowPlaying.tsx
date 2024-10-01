@@ -195,7 +195,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
 
           {/* Stats block data */}
           {this.state.songMetrics.map((songMetric: SongMetricData, i) => {
-            return <SongMetric title={songMetric.title} floatValue={songMetric.floatValue} label={songMetric.label} progressBar={songMetric.progressBar} selectMetric={this.selectMetric}/>;
+            return <SongMetric title={songMetric.title} floatValue={songMetric.floatValue} label={songMetric.label} progressBar={songMetric.progressBar} selectMetric={this.selectMetric} isMetricSelected={songMetric.title in this.state.selectedMetrics}/>;
           })}
 
         </div>
