@@ -1,13 +1,11 @@
-import styles from "../css/app.module.scss";
 import React from "react"; 
-import Modal from 'react-modal';
 import { GetRecommendationsInput, GetRecommendationsResponse, RecommendationsInput } from "../types/spotify-web-api.d";
 import getRecommendations from "../services/dynamicRecommendationsService";
 import { SelectedMetrics } from "../types/enhancify";
 import getID from './../services/common';
 import { RecommendationsRender } from "../services/enhancifyInternalService";
 
-class RecommendationsModal extends React.Component<{modalIsOpen: boolean, setModalIsOpen: (value: boolean) => void, songURI: string, selectedMetrics: SelectedMetrics}, {recommendations: GetRecommendationsResponse | {}}> {
+class RecommendationsModal extends React.Component<{setModalIsOpen: (value: boolean) => void, songURI: string, selectedMetrics: SelectedMetrics}, {recommendations: GetRecommendationsResponse | {}}> {
 
   state = {
     recommendations: {} // Recommendations that show up in the modal view
@@ -39,10 +37,10 @@ class RecommendationsModal extends React.Component<{modalIsOpen: boolean, setMod
 
   render() {
     return (
-      <Modal className={styles.modal} isOpen={this.props.modalIsOpen} onRequestClose={() => this.props.setModalIsOpen(false)}>
+      <>
         <button onClick={() => this.props.setModalIsOpen(false)}>close</button>
         {RecommendationsRender(this.state.recommendations)}
-      </Modal>
+      </>
     );
   }
 }

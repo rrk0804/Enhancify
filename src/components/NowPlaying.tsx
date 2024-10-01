@@ -7,6 +7,7 @@ import SongMetric from "./SongMetric";
 import { SelectedMetrics, SongMetricData } from "../types/enhancify";
 import { allMetrics, getSongMetrics } from "../services/enhancifyInternalService";
 import RecommendationsModal from "./RecommendationsModal";
+import Modal from 'react-modal';
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
                                               songURI: string, 
@@ -231,7 +232,9 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
             })}
           </div>
         </div>
-        { this.state.modalIsOpen ? <RecommendationsModal modalIsOpen={this.state.modalIsOpen} setModalIsOpen={this.setModalIsOpen} songURI={this.state.songURI} selectedMetrics={this.state.selectedMetrics}></RecommendationsModal> : <></> }
+        <Modal className={styles.modal} isOpen={this.state.modalIsOpen} onRequestClose={() => this.setModalIsOpen(false)}>
+          <RecommendationsModal setModalIsOpen={this.setModalIsOpen} songURI={this.state.songURI} selectedMetrics={this.state.selectedMetrics}/>
+        </Modal>
       </>
     );
   }
