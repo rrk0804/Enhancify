@@ -1,5 +1,27 @@
+import React from "react";
+import RecommendedTrack from "../components/RecommendedTrack";
 import { Labels, MetricFeatures, SongMetricData } from "../types/enhancify";
-import { AudioFeaturesResponse } from "../types/spotify-web-api";
+import { AudioFeaturesResponse, GetRecommendationsResponse } from "../types/spotify-web-api";
+
+// Creates the recommended track view for any response from the Spotify recommendations endpoint
+export function RecommendationsRender(recommendations : GetRecommendationsResponse | {}) {
+  if (Object.keys(recommendations).length == 0) {
+    return;
+  }
+  let recs = (recommendations as GetRecommendationsResponse)["tracks"];
+  let recommendedTracksHTML = [];
+  for (let i = 0; i < recs.length; i++) {
+    let recommendedSong = <RecommendedTrack songCover={recs[i].album.images[0].url}
+                                            songAlbum={recs[i].album.name}
+                                            songName={recs[i].name}
+                                            songArtists={recs[i].artists.map((artist) => artist.name)}
+                                            songURI={recs[i].uri}
+                                            key={i}>
+                          </RecommendedTrack>;
+    recommendedTracksHTML.push(recommendedSong);
+  }
+  return recommendedTracksHTML;
+}
 
 // Dynamically fills in the song metric information based on the specific metrics that the user wants to display
 export function getSongMetrics(audioFeatures: AudioFeaturesResponse, metricsToDisplay: string[]): SongMetricData[] {

@@ -4,6 +4,7 @@ import getRecommendations from "../services/dynamicRecommendationsService";
 import { GetRecommendationsInput, GetRecommendationsResponse } from "../types/spotify-web-api.d";
 import getID from './../services/common';
 import RecommendedTrack from "./RecommendedTrack";
+import { RecommendationsRender } from "../services/enhancifyInternalService";
 
 class DynamicRecommendations extends React.Component<{recTargetProp : string}, {songQueue: Array<string>, artistQueue: Array<string>, recTarget: string, recommendations: GetRecommendationsResponse | {}}> {
   
@@ -153,24 +154,7 @@ class DynamicRecommendations extends React.Component<{recTargetProp : string}, {
             <div className={styles.recommendationTarget}>{this.props.recTargetProp}</div>
           </div>
           <div className={styles.recommendationsBlock}>
-            {function(recommendations : GetRecommendationsResponse | {}) {
-              if (Object.keys(recommendations).length == 0) {
-                return;
-              }
-              let recs = (recommendations as GetRecommendationsResponse)["tracks"];
-              let recommendedTracksHTML = [];
-              for (let i = 0; i < 6; i++) {
-                let recommendedSong = <RecommendedTrack songCover={recs[i].album.images[0].url}
-                                                        songAlbum={recs[i].album.name}
-                                                        songName={recs[i].name}
-                                                        songArtists={recs[i].artists.map((artist) => artist.name)}
-                                                        songURI={recs[i].uri}
-                                                        key={i}>
-                                      </RecommendedTrack>;
-                recommendedTracksHTML.push(recommendedSong);
-              }
-              return recommendedTracksHTML;
-            }(this.state.recommendations)}
+            {RecommendationsRender(this.state.recommendations)}
           </div>
         </div>
       </>
