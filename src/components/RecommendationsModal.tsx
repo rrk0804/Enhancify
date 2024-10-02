@@ -5,7 +5,10 @@ import { SelectedMetrics } from "../types/enhancify";
 import getID from './../services/common';
 import { RecommendationsRender } from "../services/enhancifyInternalService";
 
-class RecommendationsModal extends React.Component<{setModalIsOpen: (value: boolean) => void, songURI: string, selectedMetrics: SelectedMetrics}, {recommendations: GetRecommendationsResponse | {}}> {
+class RecommendationsModal extends React.Component<{setModalIsOpen: (value: boolean) => void, 
+                                                    songURI: string, 
+                                                    selectedMetrics: SelectedMetrics}, 
+                                                   {recommendations: GetRecommendationsResponse | {}}> {
 
   state = {
     recommendations: {} // Recommendations that show up in the modal view
