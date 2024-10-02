@@ -137,16 +137,17 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
 
   modalStyles = {
     overlay: {
-      width: "1100px",
-      height: "700px",
-      left: "29%",
-      top: "8%",
-      backgroundColor: 'rgba(255, 255, 255, 0.75)',
+      width:           "1110px",
+      height:          "710px",
+      left:            "27.5%",
+      top:             "7.5%",
+      backgroundColor: "rgba(0, 0, 0, 0.90)",
     },
     content: {
       position: 'absolute',
-      top: '20px',
-      left: '50px',
+      top:      '20px',
+      left:     '200px',
+      width:    "550px",
     },
   }
 
@@ -155,7 +156,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     Spicetify.Player.addEventListener("songchange", this.setAudioFeatures);
 
     return (
-      <> 
+      <>
         <div className={styles.topBar}>
           <div className={styles.nowPlayingSidebar}>
             {Spicetify.Player.data ? 
@@ -226,12 +227,25 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
         </div>
         
         {/* Stats block */}
-        <div className={styles.recommendationsLabel} style={{marginLeft: "20px", marginBottom: "0px"}}>
-          {"Song Statistics"}
+        <div className={styles.sectionHeaderContainer}>
+          <div className={styles.recommendationsLabel} style={{marginLeft: "20px", marginBottom: "0px"}}>
+            {"Song Statistics"}
+          </div>
+          <button style={{marginLeft: "auto"}} className={styles.recommendationTarget} onClick={() => this.setState({modalIsOpen: true})}>
+            Show Current Song & Metric Recommendations
+          </button>
+          {/* <button style={{marginLeft: "auto"}} onClick={() => this.setSettingsModalIsOpen(true)}>Open settings</button> */}
+          <div className={styles.settingsIconContainer} onClick={() => this.setSettingsModalIsOpen(true)}>
+              <img src={"https://img.icons8.com/?size=100&id=2969&format=png&color=FFFFFF"} 
+                   style={{width: "25px", 
+                           height: "25px", 
+                           marginTop: "auto", 
+                           marginBottom: "auto"}} />
+          </div>
         </div>
-        <button className={styles.recommendationTarget} onClick={() => this.setState({modalIsOpen: true})}>
+        {/* <button className={styles.recommendationTarget} onClick={() => this.setState({modalIsOpen: true})}>
           Show Current Song & Metric Recommendations
-        </button>
+        </button> */}
         <div className={styles.statsBlock}>
 
           {/* Stats block data */}
@@ -246,8 +260,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
 
         </div>
         <div>
-          <button onClick={() => this.setSettingsModalIsOpen(true)}>Open settings</button>
-          <div className={styles.recommendationsLabel} style={{marginLeft:   "20px",
+          {/* <div className={styles.recommendationsLabel} style={{marginLeft:   "20px",
                                                                marginBottom: "0px",
                                                                marginTop:    "10px",
                                                               }}>
@@ -272,7 +285,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                         {metric}
                      </button>;
             })}
-          </div>
+          </div> */}
         </div>
         <Modal className={styles.modal} isOpen={this.state.modalIsOpen} onRequestClose={() => this.setModalIsOpen(false)}>
           <RecommendationsModal setModalIsOpen={this.setModalIsOpen} 
@@ -280,7 +293,8 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                                 selectedMetrics={this.state.selectedMetrics}/>
         </Modal>
         <Modal className={styles.modal} isOpen={this.state.settingsModalIsOpen} onRequestClose={() => this.setSettingsModalIsOpen(false)} style={this.modalStyles}>
-            <SettingsModal changeRecTarget={this.changeRecTarget} toggleMetric={this.toggleMetric} recTarget={this.state.recTarget} metricsToDisplay={this.state.metricsToDisplay} />
+            <SettingsModal changeRecTarget={this.changeRecTarget} toggleMetric={this.toggleMetric} recTarget={this.state.recTarget} metricsToDisplay={this.state.metricsToDisplay} 
+                            setModalIsOpen={this.setSettingsModalIsOpen}/>
         </Modal>
       </>
     );

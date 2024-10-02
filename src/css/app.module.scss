@@ -258,7 +258,8 @@
   display: flex;
   flex-direction: row;
   padding-left: 20px;
-  padding-right: 30px;
+  padding-right: 20px;
+  margin-bottom: 10px;
   align-items: center;
 }
 
@@ -281,4 +282,31 @@
 
 .settingsModalContainer {
   padding: 20px;
+}
+
+.modalHeaderContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.sectionHeaderContainer {
+  display: flex;
+  align-items: center;
+}
+
+.settingsIconContainer:hover {
+  background-color: rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+.settingsIconContainer {
+  margin-left: 10px;
+  margin-right: 45px; 
+  width: 50px;
+  height: 50px; 
+  display: flex; 
+  justify-content: center; 
+  background-color: rgb(43, 43, 43);
+  border-radius: 7px;
 }
