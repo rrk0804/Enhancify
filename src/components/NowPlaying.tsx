@@ -137,17 +137,31 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
 
   modalStyles = {
     overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.70)",
+    },
+    content: {
+      position: 'relative',
+      top:      '60px',
+      left:     '620px',
+      width:    "550px",
+      height:   "610px",
+    },
+  }
+
+  recommendationsModalStyles = {
+    overlay: {
       width:           "1110px",
       height:          "710px",
       left:            "27.5%",
       top:             "7.5%",
-      backgroundColor: "rgba(0, 0, 0, 0.90)",
+      backgroundColor: "rgba(0, 0, 0, 0.50)",
     },
     content: {
       position: 'absolute',
       top:      '20px',
-      left:     '200px',
-      width:    "550px",
+      left:     '90px',
+      width:    "800px",
+      height:   "600px"
     },
   }
 
@@ -231,9 +245,16 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           <div className={styles.recommendationsLabel} style={{marginLeft: "20px", marginBottom: "0px"}}>
             {"Song Statistics"}
           </div>
-          <button style={{marginLeft: "auto"}} className={styles.recommendationTarget} onClick={() => this.setState({modalIsOpen: true})}>
+          {/* <button style={{marginLeft: "auto"}} className={styles.recommendationTarget} onClick={() => this.setState({modalIsOpen: true})}>
             Show Current Song & Metric Recommendations
-          </button>
+          </button> */}
+          <div className={styles.settingsIconContainer} style={{marginLeft: "auto", marginRight: "0px"}} onClick={() => this.setState({modalIsOpen: true})}>
+              <img src={"https://img.icons8.com/?size=100&id=9403&format=png&color=FFFFFF"} 
+                   style={{width: "25px", 
+                           height: "25px", 
+                           marginTop: "auto", 
+                           marginBottom: "auto"}} />
+          </div>
           {/* <button style={{marginLeft: "auto"}} onClick={() => this.setSettingsModalIsOpen(true)}>Open settings</button> */}
           <div className={styles.settingsIconContainer} onClick={() => this.setSettingsModalIsOpen(true)}>
               <img src={"https://img.icons8.com/?size=100&id=2969&format=png&color=FFFFFF"} 
@@ -287,7 +308,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
             })}
           </div> */}
         </div>
-        <Modal className={styles.modal} isOpen={this.state.modalIsOpen} onRequestClose={() => this.setModalIsOpen(false)}>
+        <Modal className={styles.modal} isOpen={this.state.modalIsOpen} onRequestClose={() => this.setModalIsOpen(false)} style={this.recommendationsModalStyles}>
           <RecommendationsModal setModalIsOpen={this.setModalIsOpen} 
                                 songURI={this.state.songURI} 
                                 selectedMetrics={this.state.selectedMetrics}/>
