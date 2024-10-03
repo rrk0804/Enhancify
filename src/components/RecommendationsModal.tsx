@@ -1,4 +1,5 @@
 import React from "react"; 
+import styles from "./../css/app.module.scss";
 import { GetRecommendationsInput, GetRecommendationsResponse, RecommendationsInput } from "../types/spotify-web-api.d";
 import getRecommendations from "../services/dynamicRecommendationsService";
 import { SelectedMetrics } from "../types/enhancify";
@@ -24,7 +25,7 @@ class RecommendationsModal extends React.Component<{setModalIsOpen: (value: bool
     // Prepare the recommendations to send to the server
     let apiOptions = new GetRecommendationsInput();
     apiOptions.data.seed_tracks = getID(this.props.songURI);
-    apiOptions.data.limit = "10";
+    apiOptions.data.limit = "8";
 
     for (let key in this.props.selectedMetrics) {
       let apiDataKey = "target_" + key.toLowerCase();
@@ -40,10 +41,22 @@ class RecommendationsModal extends React.Component<{setModalIsOpen: (value: bool
 
   render() {
     return (
-      <>
-        <button onClick={() => this.props.setModalIsOpen(false)}>close</button>
-        {RecommendationsRender(this.state.recommendations)}
-      </>
+      <div style={{padding: "30px"}}>
+        <div className={styles.modalHeaderContainer}>
+            <div className={styles.recommendationsLabel} style={{marginLeft:  "20px",
+                                                                marginBottom: "0px",
+                                                                marginTop:    "10px",
+                                                                }}>
+                {"Song Recommendations"}
+            </div>
+            <img className={styles.playIcon} style={{marginLeft: "auto"}} src={"https://img.icons8.com/?size=100&id=6483&format=png&color=FFFFFF"} 
+                  onClick={() => this.props.setModalIsOpen(false)}/>
+        </div>
+        {/* <button onClick={() => this.props.setModalIsOpen(false)}>close</button> */}
+        <div className={styles.metricsRecommendationContainer}>
+          {RecommendationsRender(this.state.recommendations)}
+        </div>
+      </div>
     );
   }
 }
