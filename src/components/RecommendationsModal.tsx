@@ -41,16 +41,19 @@ class RecommendationsModal extends React.Component<{setModalIsOpen: (value: bool
 
   render() {
     return (
-      <div style={{padding: "30px"}}>
-        <div className={styles.modalHeaderContainer}>
-            <div className={styles.recommendationsLabel} style={{marginLeft:  "20px",
-                                                                marginBottom: "0px",
-                                                                marginTop:    "10px",
-                                                                }}>
-                {"Song Recommendations"}
+      <div className={styles.recommendationsModalContainer} style={{overflowY: "scroll", height: "550px"}}>
+        <div className={styles.modalHeaderContainer} style={{marginBottom: "10px"}}>
+            <div className={styles.recommendationsLabel} style={{marginBottom: "0px"}}>
+                {"More Recommendations"}
             </div>
             <img className={styles.playIcon} style={{marginLeft: "auto"}} src={"https://img.icons8.com/?size=100&id=6483&format=png&color=FFFFFF"} 
                   onClick={() => this.props.setModalIsOpen(false)}/>
+        </div>
+        <div className={styles.settingContainer} style={{paddingLeft: "0", marginBottom: "30px"}}>
+          {Object.keys(this.props.selectedMetrics).map((metric_name) => <div className={styles.recommendationTarget} style={{marginRight: "10px",
+                                                                                                                           }}>
+                                                                          {metric_name}
+                                                                        </div>)}
         </div>
         {/* <button onClick={() => this.props.setModalIsOpen(false)}>close</button> */}
         <div className={styles.metricsRecommendationContainer}>

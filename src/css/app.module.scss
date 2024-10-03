@@ -64,7 +64,7 @@
 }
 
 .statContainer:hover {
-  background-color: rgb(93, 145, 111);
+  background-color: rgb(99, 155, 119);
 }
 
 .statTitle {
@@ -233,7 +233,6 @@
 }
 
 .recommendationTarget {
-  position: relative;
   color: white;
   font-weight: 600;
   font-size: 20px;
@@ -261,6 +260,7 @@
   padding-right: 20px;
   margin-bottom: 10px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .settingLabel {
@@ -282,6 +282,12 @@
 
 .settingsModalContainer {
   padding: 20px;
+}
+
+.recommendationsModalContainer {
+  padding: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .modalHeaderContainer {
@@ -309,4 +315,12 @@
   justify-content: center; 
   background-color: rgb(43, 43, 43);
   border-radius: 7px;
+}
+
+.metricsRecommendationContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  row-gap: 13px;
+  column-gap: 10px;
 }
