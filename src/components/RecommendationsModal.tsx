@@ -55,7 +55,6 @@ class RecommendationsModal extends React.Component<{setModalIsOpen: (value: bool
                                                                           {metric_name}
                                                                         </div>)}
         </div>
-        {/* <button onClick={() => this.props.setModalIsOpen(false)}>close</button> */}
         <div className={styles.metricsRecommendationContainer}>
           {RecommendationsRender(this.state.recommendations)}
         </div>

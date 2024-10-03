@@ -245,9 +245,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
           <div className={styles.recommendationsLabel} style={{marginLeft: "20px", marginBottom: "0px"}}>
             {"Song Statistics"}
           </div>
-          {/* <button style={{marginLeft: "auto"}} className={styles.recommendationTarget} onClick={() => this.setState({modalIsOpen: true})}>
-            Show Current Song & Metric Recommendations
-          </button> */}
           <div className={styles.settingsIconContainer} style={{marginLeft: "auto", marginRight: "0px"}} onClick={() => this.setState({modalIsOpen: true})}>
               <img src={"https://img.icons8.com/?size=100&id=9403&format=png&color=FFFFFF"} 
                    style={{width: "25px", 
@@ -255,7 +252,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                            marginTop: "auto", 
                            marginBottom: "auto"}} />
           </div>
-          {/* <button style={{marginLeft: "auto"}} onClick={() => this.setSettingsModalIsOpen(true)}>Open settings</button> */}
           <div className={styles.settingsIconContainer} onClick={() => this.setSettingsModalIsOpen(true)}>
               <img src={"https://img.icons8.com/?size=100&id=2969&format=png&color=FFFFFF"} 
                    style={{width: "25px", 
@@ -264,9 +260,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                            marginBottom: "auto"}} />
           </div>
         </div>
-        {/* <button className={styles.recommendationTarget} onClick={() => this.setState({modalIsOpen: true})}>
-          Show Current Song & Metric Recommendations
-        </button> */}
         <div className={styles.statsBlock}>
 
           {/* Stats block data */}
@@ -281,32 +274,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
 
         </div>
         <div>
-          {/* <div className={styles.recommendationsLabel} style={{marginLeft:   "20px",
-                                                               marginBottom: "0px",
-                                                               marginTop:    "10px",
-                                                              }}>
-              {"Settings"}
-          </div>
-          <div className={styles.settingContainer}>
-            <span className={styles.settingLabel}>{"Show recommendations by: "}</span>
-            <button onClick={this.changeRecTarget} className={styles.recommendationTarget}
-                    disabled={false} style={{marginLeft: "10px", marginTop: "0px"}}> 
-              {this.state.recTarget} 
-            </button>
-          </div>
-          <div className={styles.settingContainer}>
-            <span className={styles.settingLabel}>{"Displayed statistics: "}</span>
-            {allMetrics.map((metric: string, i) => {
-              return <button className={styles.recommendationTarget} 
-                             style={{marginLeft: "5px", 
-                                     fontSize: "15px", 
-                                     backgroundColor: this.state.metricsToDisplay.includes(metric) ? 
-                                                      "rgb(81, 126, 97)" : "rgb(105,105,105)"}} 
-                             onClick={() => this.toggleMetric(metric)}>
-                        {metric}
-                     </button>;
-            })}
-          </div> */}
         </div>
         <Modal className={styles.modal} isOpen={this.state.modalIsOpen} onRequestClose={() => this.setModalIsOpen(false)} style={this.recommendationsModalStyles}>
           <RecommendationsModal setModalIsOpen={this.setModalIsOpen} 
