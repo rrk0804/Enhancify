@@ -32,7 +32,7 @@
 }
 
 .statsBlock {
-  width: 96.5%;
+  width: 105%;
   margin-top: 40px;
   margin: 20px;
   margin-right: 0px;
@@ -52,7 +52,7 @@
 
 .statContainer {
   background-color: rgb(81, 126, 97);
-  width: 330px;
+  width: 30%;
   height: 145px;
   border-radius: 9px;
   margin: 5px;
@@ -282,6 +282,8 @@
 
 .settingsModalContainer {
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .recommendationsModalContainer {

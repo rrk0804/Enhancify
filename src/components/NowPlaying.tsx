@@ -142,7 +142,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     content: {
       position: 'relative',
       top:      '60px',
-      left:     '620px',
+      left:     '27.5%',
       width:    "550px",
       height:   "610px",
     },
@@ -150,16 +150,12 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
 
   recommendationsModalStyles = {
     overlay: {
-      width:           "1110px",
-      height:          "710px",
-      left:            "27.5%",
-      top:             "7.5%",
-      backgroundColor: "rgba(0, 0, 0, 0.50)",
+      backgroundColor: "rgba(0, 0, 0, 0.70)",
     },
     content: {
-      position: 'absolute',
-      top:      '20px',
-      left:     '90px',
+      position: 'relative',
+      top:      '55px',
+      left:     '21.5%',
       width:    "800px",
       height:   "600px"
     },

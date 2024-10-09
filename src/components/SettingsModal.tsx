@@ -43,6 +43,9 @@ class SettingsModal extends React.Component<{changeRecTarget: () => void,
                             </button>);
                     })}
             </div>
+            <div style={{marginTop: "180px", alignItems: "center", width: "100%"}}>
+                    <button className={styles.recommendationTarget} style={{marginLeft: "230px"}} onClick={() => this.props.setModalIsOpen(false)}>Save</button>
+            </div>
       </div>);
     }
 }
