@@ -18,7 +18,8 @@ class SettingsModal extends React.Component<{changeRecTarget: () => void,
                                                                     }}>
                     {"Settings"}
                 </div>
-                <img className={styles.playIcon} style={{marginLeft: "auto"}} src={"https://img.icons8.com/?size=100&id=6483&format=png&color=FFFFFF"} 
+                <img className={styles.playIcon} style={{marginLeft: "auto"}} 
+                     src={"https://img.icons8.com/?size=100&id=6483&format=png&color=FFFFFF"} 
                       onClick={() => this.props.setModalIsOpen(false)}/>
             </div>
             <div className={styles.settingContainer}>
@@ -38,13 +39,17 @@ class SettingsModal extends React.Component<{changeRecTarget: () => void,
                                                 fontSize:        "15px", 
                                                 backgroundColor: this.props.metricsToDisplay.includes(metric) ? 
                                                                 "rgb(81, 126, 97)" : "rgb(105,105,105)"}} 
-                                    onClick={() => this.props.toggleMetric(metric)}>
+                                        onClick={() => this.props.toggleMetric(metric)}>
                                     {metric}
                             </button>);
                     })}
             </div>
             <div style={{marginTop: "180px", alignItems: "center", width: "100%"}}>
-                    <button className={styles.recommendationTarget} style={{marginLeft: "230px"}} onClick={() => this.props.setModalIsOpen(false)}>Save</button>
+                    <button className={styles.recommendationTarget} 
+                            style={{marginLeft: "220px"}} 
+                            onClick={() => this.props.setModalIsOpen(false)}>
+                                Save
+                    </button>
             </div>
       </div>);
     }
