@@ -44,7 +44,7 @@ const metricFeatures: MetricFeatures = {
     Loudness: "dB",
     Tempo: "bpm",
     Time_Signature: "/4",
-    Key: "in Pitch Class notation",
+    Key: "in Pitch Class",
     Mode: "(0: Minor, 1: Major)",
   }
 };
