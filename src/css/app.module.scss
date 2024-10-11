@@ -13,6 +13,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  height:auto;
 }
 
 .trackInfoPrimary {
@@ -31,7 +32,7 @@
 }
 
 .statsBlock {
-  width: 96.5%;
+  width: 105%;
   margin-top: 40px;
   margin: 20px;
   margin-right: 0px;
@@ -41,10 +42,9 @@
 }
 
 .statsBlock {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  row-gap: 10px;
-  column-gap: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   padding: 10px;
   padding-right: 0px;
   padding-top: 0px;
@@ -52,12 +52,19 @@
 
 .statContainer {
   background-color: rgb(81, 126, 97);
+  width: 30%;
+  height: 145px;
   border-radius: 9px;
+  margin: 5px;
   padding: 10px;
   padding-left: 30px;
   padding-right: 30px;
   padding-bottom: 10px;
   display: flex;
+}
+
+.statContainer:hover {
+  background-color: rgb(99, 155, 119);
 }
 
 .statTitle {
@@ -67,6 +74,8 @@
 
 .statLabel {
   font-weight: 600;
+  width: 100px;
+  text-overflow: ellipsis;
 }
 
 .statValue {
@@ -95,8 +104,8 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  row-gap: 20px;
-  column-gap: 20px;
+  row-gap: 13px;
+  column-gap: 10px;
 }
 
 .trackContainer {
@@ -107,6 +116,10 @@
   padding-right: 20px;
 }
 
+.trackContainer:hover {
+  background-image: linear-gradient(to right, rgb(62, 62, 62), rgb(99, 99, 99));
+}
+
 .recommendationsCover {
   width: 70px;
   height: 70px;
@@ -115,7 +128,7 @@
 }
 
 .trackName {
-  width: 120px;
+  width: 150px;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -125,6 +138,14 @@
   height: 40px;
   margin-left: auto;
   align-self: center;
+  filter: brightness(90%);
+}
+
+.playIcon:hover {
+  cursor: pointer;
+  filter: brightness(100%);
+  width: 41px;
+  height: 41px;
 }
 
 .changeRecTragetBtn {
@@ -212,7 +233,6 @@
 }
 
 .recommendationTarget {
-  position: relative;
   color: white;
   font-weight: 600;
   font-size: 20px;
@@ -237,8 +257,10 @@
   display: flex;
   flex-direction: row;
   padding-left: 20px;
-  padding-right: 30px;
+  padding-right: 20px;
+  margin-bottom: 10px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .settingLabel {
@@ -256,4 +278,51 @@
   margin-left: 50px;
   margin-bottom: 50px;
   text-wrap: wrap;
+}
+
+.settingsModalContainer {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.recommendationsModalContainer {
+  padding: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.modalHeaderContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.sectionHeaderContainer {
+  display: flex;
+  align-items: center;
+}
+
+.settingsIconContainer:hover {
+  background-color: rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+.settingsIconContainer {
+  margin-left: 10px;
+  margin-right: 45px; 
+  width: 50px;
+  height: 50px; 
+  display: flex; 
+  justify-content: center; 
+  background-color: rgb(43, 43, 43);
+  border-radius: 7px;
+}
+
+.metricsRecommendationContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  row-gap: 13px;
+  column-gap: 10px;
 }

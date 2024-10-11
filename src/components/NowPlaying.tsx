@@ -7,6 +7,7 @@ import SongMetric from "./SongMetric";
 import { SelectedMetrics, SongMetricData } from "../types/enhancify";
 import { allMetrics, getSongMetrics } from "../services/enhancifyInternalService";
 import RecommendationsModal from "./RecommendationsModal";
+import SettingsModal from "./SettingsModal";
 import Modal from 'react-modal';
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
@@ -15,16 +16,22 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                                               songMetrics: SongMetricData[],
                                               metricsToDisplay: string[],
                                               modalIsOpen: boolean,
+                                              settingsModalIsOpen: boolean,
                                               selectedMetrics: SelectedMetrics}> {
   
   state = {
-    audioFeatures: {},  // Features of the currently playing song (name, artist, stats)
-    songURI: "",        // URI of the currently playing song
-    recTarget: "songs", // Recommendations based on either songs or artist
-    songMetrics: [], // Current song metric information
-    metricsToDisplay: Spicetify.LocalStorage.get("metricsToDisplay") != "" ? Spicetify.LocalStorage.get("metricsToDisplay")?.split(',') || ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"] : [], // Current metric information types
-    modalIsOpen: false, // Whether the modal is currently open
-    selectedMetrics: JSON.parse(Spicetify.LocalStorage.get("selectedMetrics") || "{}"), // Metrics that have been selected to be fed into the Spotify recommendations endpoint
+    audioFeatures:        {},      // Features of the currently playing song (name, artist, stats)
+    songURI:              "",      // URI of the currently playing song
+    recTarget:            "songs", // Recommendations based on either songs or artist
+    songMetrics:          [],      // Current song metric information
+    metricsToDisplay:     Spicetify.LocalStorage.get("metricsToDisplay") != "" ? 
+                          Spicetify.LocalStorage.get("metricsToDisplay")?.split(',') || 
+                          ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"] : 
+                          [],     // Current metric information types
+    modalIsOpen:         false,   // Whether the modal is currently open
+    settingsModalIsOpen: false,   
+    selectedMetrics:     JSON.parse(Spicetify.LocalStorage.get("selectedMetrics") || 
+                         "{}"), // Metrics that have been selected to be fed into the Spotify recommendations endpoint
   }
 
   componentDidMount = () => {
@@ -107,6 +114,12 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     });
   }
 
+  setSettingsModalIsOpen = (value: boolean) => {
+    this.setState({
+      settingsModalIsOpen: value,
+    });
+  }
+
   // Select a metric to toggle whether they should be included in the recommendations endpoint request or not
   selectMetric = (metric: string, value: string) => {
     let copy: SelectedMetrics = { ...this.state.selectedMetrics };
@@ -122,12 +135,38 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     });
   }
 
+  modalStyles = {
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.70)",
+    },
+    content: {
+      position: 'relative',
+      top:      '60px',
+      left:     '27.5%',
+      width:    "550px",
+      height:   "610px",
+    },
+  }
+
+  recommendationsModalStyles = {
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.70)",
+    },
+    content: {
+      position: 'relative',
+      top:      '55px',
+      left:     '21.5%',
+      width:    "800px",
+      height:   "600px"
+    },
+  }
+
   render() {
 
     Spicetify.Player.addEventListener("songchange", this.setAudioFeatures);
 
     return (
-      <> 
+      <>
         <div className={styles.topBar}>
           <div className={styles.nowPlayingSidebar}>
             {Spicetify.Player.data ? 
@@ -140,16 +179,16 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                 : <></>}
 
                 {/* Track title */}
-                <text className={styles.text} style={{marginTop: "5px", 
-                                                      fontSize: "30px",
-                                                      fontWeight: "530",
+                <text className={styles.text} style={{marginTop:    "5px", 
+                                                      fontSize:     "30px",
+                                                      fontWeight:   "530",
                                                       textOverflow: "ellipsis",
-                                                      overflow: "hidden", 
-                                                      whiteSpace: "nowrap",
-                                                      textAlign: "center",
+                                                      overflow:     "hidden", 
+                                                      whiteSpace:   "nowrap",
+                                                      textAlign:    "center",
                                                       alignContent: "center",
-                                                      width: "250px",
-                                                      color: "white"}}>
+                                                      width:        "250px",
+                                                      color:        "white"}}>
                   {Spicetify.Player.data.item.name}
                 </text>
 
@@ -170,11 +209,11 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                       trackAritistsInnnerHTML = trackAritistsInnnerHTML.substring(0, trackAritistsInnnerHTML.length - 2);
                     }
 
-                    return <text className={styles.text} style={{fontSize: "15px", 
+                    return <text className={styles.text} style={{fontSize:    "15px", 
                                                                 marginBottom: "2px",
                                                                 textOverflow: "ellipsis",
-                                                                width: "250px",
-                                                                textAlign: "center",}}> 
+                                                                width:        "250px",
+                                                                textAlign:    "center",}}> 
                               {trackAritistsInnnerHTML} 
                             </text>
                   } else {
@@ -183,10 +222,10 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                 })()}
 
                 {/* Track album */}
-                <text className={styles.text} style={{fontSize: "15px", 
+                <text className={styles.text} style={{fontSize:     "15px", 
                                                       textOverflow: "ellipsis", 
-                                                      width: "250px",
-                                                      textAlign: "center",}}>
+                                                      width:        "250px",
+                                                      textAlign:    "center",}}>
                   {Spicetify.Player.data.item.album.name}
                 </text>
               </div>
@@ -198,42 +237,48 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
         </div>
         
         {/* Stats block */}
-        <div className={styles.recommendationsLabel} style={{marginLeft: "20px", marginBottom: "0px"}}>
-          {"Song Statistics"}
+        <div className={styles.sectionHeaderContainer}>
+          <div className={styles.recommendationsLabel} style={{marginLeft: "20px", marginBottom: "0px"}}>
+            {"Song Statistics"}
+          </div>
+          <div className={styles.settingsIconContainer} style={{marginLeft: "auto", marginRight: "0px"}} onClick={() => this.setState({modalIsOpen: true})}>
+              <img src={"https://img.icons8.com/?size=100&id=9403&format=png&color=FFFFFF"} 
+                   style={{width: "25px", 
+                           height: "25px", 
+                           marginTop: "auto", 
+                           marginBottom: "auto"}} />
+          </div>
+          <div className={styles.settingsIconContainer} onClick={() => this.setSettingsModalIsOpen(true)}>
+              <img src={"https://img.icons8.com/?size=100&id=2969&format=png&color=FFFFFF"} 
+                   style={{width: "25px", 
+                           height: "25px", 
+                           marginTop: "auto", 
+                           marginBottom: "auto"}} />
+          </div>
         </div>
-        <button className={styles.recommendationTarget} onClick={() => this.setState({modalIsOpen: true})}>
-          Show Current Song & Metric Recommendations
-        </button>
         <div className={styles.statsBlock}>
 
           {/* Stats block data */}
           {this.state.songMetrics.map((songMetric: SongMetricData, i) => {
-            return <SongMetric title={songMetric.title} floatValue={songMetric.floatValue} label={songMetric.label} progressBar={songMetric.progressBar} selectMetric={this.selectMetric} isMetricSelected={songMetric.title in this.state.selectedMetrics}/>;
+            return <SongMetric title={songMetric.title} 
+                               floatValue={songMetric.floatValue} 
+                               label={songMetric.label} 
+                               progressBar={songMetric.progressBar} 
+                               selectMetric={this.selectMetric} 
+                               isMetricSelected={songMetric.title in this.state.selectedMetrics}/>;
           })}
 
         </div>
         <div>
-          <div className={styles.recommendationsLabel} style={{marginLeft: "20px",
-                                                               marginBottom: "0px",
-                                                               marginTop: "10px",
-                                                              }}>
-              {"Settings"}</div>
-          <div className={styles.settingContainer}>
-            <span className={styles.settingLabel}>{"Show recommendations by: "}</span>
-            <button onClick={this.changeRecTarget} className={styles.recommendationTarget}
-                    disabled={false} style={{marginLeft: "10px", marginTop: "0px"}}> 
-              {this.state.recTarget} 
-            </button>
-          </div>
-          <div className={styles.settingContainer}>
-            <span className={styles.settingLabel}>{"Displayed statistics: "}</span>
-            {allMetrics.map((metric: string, i) => {
-              return <button className={styles.recommendationTarget} style={{marginLeft: "5px", fontSize: "15px", backgroundColor: this.state.metricsToDisplay.includes(metric) ? "rgb(81, 126, 97)" : "rgb(105,105,105)"}} onClick={() => this.toggleMetric(metric)}>{metric}</button>
-            })}
-          </div>
         </div>
-        <Modal className={styles.modal} isOpen={this.state.modalIsOpen} onRequestClose={() => this.setModalIsOpen(false)}>
-          <RecommendationsModal setModalIsOpen={this.setModalIsOpen} songURI={this.state.songURI} selectedMetrics={this.state.selectedMetrics}/>
+        <Modal className={styles.modal} isOpen={this.state.modalIsOpen} onRequestClose={() => this.setModalIsOpen(false)} style={this.recommendationsModalStyles}>
+          <RecommendationsModal setModalIsOpen={this.setModalIsOpen} 
+                                songURI={this.state.songURI} 
+                                selectedMetrics={this.state.selectedMetrics}/>
+        </Modal>
+        <Modal className={styles.modal} isOpen={this.state.settingsModalIsOpen} onRequestClose={() => this.setSettingsModalIsOpen(false)} style={this.modalStyles}>
+            <SettingsModal changeRecTarget={this.changeRecTarget} toggleMetric={this.toggleMetric} recTarget={this.state.recTarget} metricsToDisplay={this.state.metricsToDisplay} 
+                            setModalIsOpen={this.setSettingsModalIsOpen}/>
         </Modal>
       </>
     );
