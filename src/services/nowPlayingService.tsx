@@ -1,4 +1,5 @@
 import type { AudioFeaturesResponse } from "../types/spotify-web-api";
+import getID from "./common";
 
 async function getAudioFeatures(songURI: string | undefined): Promise<AudioFeaturesResponse | {}> {
     if (!songURI) {
@@ -7,7 +8,7 @@ async function getAudioFeatures(songURI: string | undefined): Promise<AudioFeatu
 
     var accessToken = Spicetify.Platform.Session.accessToken;
 
-    var songID = songURI.split(":")[2];
+    var songID = getID(songURI);
     let response = await fetch(
         "https://api.spotify.com/v1/audio-features/" + songID,
         {

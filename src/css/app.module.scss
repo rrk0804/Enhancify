@@ -2,3 +2,327 @@
   font-size: 16px;
   word-wrap: break-word;
 }
+
+.topBar {
+  display: flex;
+  flex-direction: row;
+}
+
+.nowPlayingSidebar {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height:auto;
+}
+
+.trackInfoPrimary {
+  width: 280px;
+  margin-top: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.trackCover {
+  border-radius: 5px;
+  width: 250px;
+  height: 250px;
+}
+
+.statsBlock {
+  width: 105%;
+  margin-top: 40px;
+  margin: 20px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  border-radius: 5px;
+}
+
+.statsBlock {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 10px;
+  padding-right: 0px;
+  padding-top: 0px;
+}
+
+.statContainer {
+  background-color: rgb(81, 126, 97);
+  width: 30%;
+  height: 145px;
+  border-radius: 9px;
+  margin: 5px;
+  padding: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 10px;
+  display: flex;
+}
+
+.statContainer:hover {
+  background-color: rgb(99, 155, 119);
+}
+
+.statTitle {
+  font-weight: bolder;
+  font-size: larger;
+}
+
+.statLabel {
+  font-weight: 600;
+  width: 100px;
+  text-overflow: ellipsis;
+}
+
+.statValue {
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.graphicContainer {
+  justify-content: flex-end;
+  align-self: center;
+  margin-left: auto;
+  width: 100px;
+  height: 100px;
+}
+
+.recommendationsSection {
+  width: 750px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.recommendationsBlock {
+  border-radius: 5px;
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  row-gap: 13px;
+  column-gap: 10px;
+}
+
+.trackContainer {
+  display: flex;
+  background-image: linear-gradient(to right, rgb(43, 43, 43), rgb(79, 79, 79));
+  border-radius: 10px;
+  padding: 10px;
+  padding-right: 20px;
+}
+
+.trackContainer:hover {
+  background-image: linear-gradient(to right, rgb(62, 62, 62), rgb(99, 99, 99));
+}
+
+.recommendationsCover {
+  width: 70px;
+  height: 70px;
+  border-radius: 6px;   
+  margin-right: 20px;   
+}
+
+.trackName {
+  width: 150px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.playIcon {
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  align-self: center;
+  filter: brightness(90%);
+}
+
+.playIcon:hover {
+  cursor: pointer;
+  filter: brightness(100%);
+  width: 41px;
+  height: 41px;
+}
+
+.changeRecTragetBtn {
+  border-radius: 10px;
+  font-size: large;
+  padding: 10px;
+  background-color: rgb(81, 126, 97);
+  color: white;
+}
+
+.trackNameText {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+  position: relative;
+  display: inline-block;
+  transition-delay: 2s;
+  transition-property: right;
+}
+
+.leftSideBar {
+  display: flex;
+  flex-direction: column;
+}
+
+// .scrollTitle {
+//   -webkit-animation: linear infinite;
+//   -webkit-animation-name: run;
+//   -webkit-animation-duration: 5s;
+//   animation: linear infinite;
+//   animation-name: run;
+//   animation-duration: 5s;
+// }
+
+.scrollTitle {
+  animation: scrollText 10s infinite linear;
+  animation-delay: 10s;
+}
+
+@keyframes scrollText {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@-webkit-keyframes run {
+  0% {
+    right: 0;
+  }
+  50% {
+    right: 100%;
+  }
+  100% {
+    right: -2%;    
+  }
+}
+
+@keyframes run {
+  0% {
+    right: 0;
+  }
+  50% {
+    right: 100%;
+  }
+  100% {
+    right: -2%;    
+  }
+}
+
+.recommendationsLabel {
+  color: rgb(227, 227, 227);
+  font-size: 32px;
+  font-weight: 510;
+  margin-bottom: 10px;
+}
+
+.recommendationHeader {
+  display: flex;
+  align-items: center;
+}
+
+.recommendationTarget {
+  color: white;
+  font-weight: 600;
+  font-size: 20px;
+  text-align: center;
+  align-items: center;
+  height: auto;
+  background-color: rgb(81, 126, 97);
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 9px;
+  padding-top: 5px;
+  border-radius: 10px;
+  margin-top: 7px;
+}
+
+.recommendationsHeaderSpacer {
+  flex-grow: 1;
+  visibility: hidden;
+}
+
+.settingContainer {
+  display: flex;
+  flex-direction: row;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.settingLabel {
+  font-size: larger;
+  font-weight: 500;
+  color: white;
+}
+
+.modal {
+  background-color: black;
+  height: 80%;
+  width: 80%;
+  margin-right: 50px;
+  margin-top: 50px;
+  margin-left: 50px;
+  margin-bottom: 50px;
+  text-wrap: wrap;
+}
+
+.settingsModalContainer {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.recommendationsModalContainer {
+  padding: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.modalHeaderContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.sectionHeaderContainer {
+  display: flex;
+  align-items: center;
+}
+
+.settingsIconContainer:hover {
+  background-color: rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+.settingsIconContainer {
+  margin-left: 10px;
+  margin-right: 45px; 
+  width: 50px;
+  height: 50px; 
+  display: flex; 
+  justify-content: center; 
+  background-color: rgb(43, 43, 43);
+  border-radius: 7px;
+}
+
+.metricsRecommendationContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  row-gap: 13px;
+  column-gap: 10px;
+}

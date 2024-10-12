@@ -11,9 +11,15 @@
   "devDependencies": {
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
+    "@types/react-modal": "^3.16.3",
     "spicetify-creator": "^1.0.17"
   },
   "dependencies": {
-    "@spotify/web-api-ts-sdk": "^1.2.0"
+    "@spotify/web-api-ts-sdk": "^1.2.0",
+    "@types/jquery": "^3.5.31",
+    "@types/react-modal": "^3.16.3",
+    "jquery": "^3.7.1",
+    "react-circular-progressbar": "^2.1.0",
+    "react-modal": "^3.16.1"
   }
 }
