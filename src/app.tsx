@@ -1,14 +1,15 @@
 import React from "react";
-import NowPlaying from "./components/NowPlaying";
+import NowPlaying from "./components/NowPlaying"; 
 
-class App extends React.Component<{}, {}> {
-  render() {
-    return (
-      <>
-        <NowPlaying />
-      </>
-    );
-  }
+// --- React Component for the App ---
+class App extends React.Component {
+    render() {
+        return (
+            <>
+                <NowPlaying />
+            </>
+        );
+    }
 }
 
 export default App;
