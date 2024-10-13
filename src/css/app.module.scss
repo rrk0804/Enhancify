@@ -326,3 +326,40 @@
   row-gap: 13px;
   column-gap: 10px;
 }
+
+.preset-buttons input, .preset-buttons button, #savePresetBtn, #loadPresetBtn, #undoBtn {
+  font-size: 16px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 10px;
+  padding: 10px;
+  color: white;
+}
+
+.preset-buttons, #savePresetBtn, #loadPresetBtn, #undoBtn {
+  display: flex;
+  align-items: center;
+}
+
+.preset-buttons button, #savePresetBtn, #loadPresetBtn, #undoBtn {
+  background-color: rgb(81, 126, 97);
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  border: none;
+  margin-right: 5px;
+}
+
+.preset-buttons button:hover, #savePresetBtn, #loadPresetBtn, #undoBtn {
+  background-color: rgb(99, 155, 119);
+}
+
+.preset-buttons input, #savePresetBtn, #loadPresetBtn, #undoBtn {
+  color: white;
+  background-color: rgb(43, 43, 43);
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 10px;
+  border: none;
+}
+

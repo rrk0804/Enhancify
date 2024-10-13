@@ -28,10 +28,11 @@ async function getPlaylistTrackIDs(playlistID: string): Promise<string[]> {
         const data = await response.json();
 
         // Extract the track IDs from the fetched data
-        const ids = data.items.map((item: any) => item.track.id);
+        const ids = data.items
+            .filter((item: any) => item.track && item.track.id)  // Ensure track is not null
+            .map((item: any) => item.track.id);
+        
         trackIDs = trackIDs.concat(ids);
-
-        // Check if there's another page of results, otherwise set nextURL to null to end the loop
         nextURL = data.next;
     }
 

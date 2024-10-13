@@ -1,32 +1,44 @@
 import type { AudioFeaturesResponse } from "../types/spotify-web-api";
 
 // Accept an array of songIDs directly
-async function getMultiTrackAudioFeatures(songIDs: string[] | undefined): Promise<AudioFeaturesResponse[]> {
+async function getMultiTrackAudioFeatures(songIDs: string[]): Promise<AudioFeaturesResponse[]> {
     if (!songIDs || songIDs.length === 0) {
         return [];
     }
 
     const accessToken = Spicetify.Platform.Session.accessToken;
+    let allAudioFeatures: AudioFeaturesResponse[] = [];
 
-    // Make multiple API requests using Promise.all to fetch audio features for each songID
-    const responses = await Promise.all(
-        songIDs.map(async (songID) => {
-            let response = await fetch (
-                "https://api.spotify.com/v1/audio-features/" + songID,
-                {
-                    headers: {
-                        Authorization: "Bearer " + accessToken,
-                    },
-                }
-            );
+    // Split the songIDs array into chunks of up to 100 IDs each
+    const chunks = [];
+    const chunkSize = 100;
+    for (let i = 0; i < songIDs.length; i += chunkSize) {
+        chunks.push(songIDs.slice(i, i + chunkSize));
+    }
 
-            // Return the JSON response if the status is 200, else return null
-            return response.status === 200 ? await response.json() : null;
-        })
-    );
+    // Fetch audio features for each chunk of songIDs
+    for (const chunk of chunks) {
+        const idsString = chunk.join(',');
+        const response = await fetch(
+            `https://api.spotify.com/v1/audio-features?ids=${idsString}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
 
-    // Filter out any null values in case of failed requests
-    return responses.filter((response) => response !== null) as AudioFeaturesResponse[];
+        if (response.status === 200) {
+            const data = await response.json();
+            if (data && data.audio_features) {
+                allAudioFeatures = allAudioFeatures.concat(data.audio_features.filter(Boolean));
+            }
+        } else {
+            console.error("Failed to fetch audio features for chunk:", chunk);
+        }
+    }
+
+    return allAudioFeatures;
 }
 
 export default getMultiTrackAudioFeatures;
