@@ -198,6 +198,10 @@ $path = $path.Replace('config-xpui.ini', 'CustomApps\Enhancify')
 
 echo $path
 
+if (Test-Path $path) {
+  Remove-Item $path -Force -Recurse
+}
+
 git clone https://github.com/rrk0804/Enhancify.git $path
 
 spicetify config custom_apps Enhancify
