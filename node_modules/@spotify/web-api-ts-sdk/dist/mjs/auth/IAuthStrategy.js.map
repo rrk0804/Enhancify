@@ -1,0 +1,1 @@
+{"version":3,"file":"IAuthStrategy.js","sourceRoot":"","sources":["../../../src/auth/IAuthStrategy.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,MAAM,gBAAgB,GAAgB,EAAE,YAAY,EAAE,kBAAkB,EAAE,UAAU,EAAE,EAAE,EAAE,UAAU,EAAE,CAAC,EAAE,aAAa,EAAE,EAAE,EAAE,OAAO,EAAE,CAAC,CAAC,EAAE,CAAC;AACjJ,MAAM,UAAU,kBAAkB,CAAC,KAAU;IACzC,OAAO,KAAK,KAAK,gBAAgB,CAAC;AACtC,CAAC"}

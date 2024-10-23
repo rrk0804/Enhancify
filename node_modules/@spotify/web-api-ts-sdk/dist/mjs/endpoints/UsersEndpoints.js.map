@@ -1,0 +1,1 @@
+{"version":3,"file":"UsersEndpoints.js","sourceRoot":"","sources":["../../../src/endpoints/UsersEndpoints.ts"],"names":[],"mappings":"AACA,OAAO,aAAa,MAAM,oBAAoB,CAAC;AAE/C,MAAM,CAAC,OAAO,OAAO,cAAe,SAAQ,aAAa;IAE9C,OAAO,CAAC,MAAc;QACzB,OAAO,IAAI,CAAC,UAAU,CAAO,SAAS,MAAM,EAAE,CAAC,CAAC;IACpD,CAAC;CACJ"}

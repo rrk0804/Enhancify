@@ -1,0 +1,1 @@
+{"version":3,"file":"DocumentLocationRedirectionStrategy.js","sourceRoot":"","sources":["../../../src/redirection/DocumentLocationRedirectionStrategy.ts"],"names":[],"mappings":";;AAEA,MAAqB,mCAAmC;IAC7C,KAAK,CAAC,QAAQ,CAAC,SAAuB;QACzC,QAAQ,CAAC,QAAQ,GAAG,SAAS,CAAC,QAAQ,EAAE,CAAC;IAC7C,CAAC;IAEM,KAAK,CAAC,oBAAoB;IACjC,CAAC;CACJ;AAPD,sDAOC"}
