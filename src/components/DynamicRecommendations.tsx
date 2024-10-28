@@ -146,18 +146,16 @@ class DynamicRecommendations extends React.Component<{recTargetProp : string}, {
   render() {
     Spicetify.Player.addEventListener("onprogress", this.addToQueue);
     return (
-      <>
-        <div className={styles.recommendationsSection}>
-          <div className={styles.recommendationHeader}>
-            <div className={styles.recommendationsLabel} style={{marginTop: "10px"}}>{"Song Recommendations"}</div>
-            <div className={styles.recommendationsHeaderSpacer}></div>
-            <div className={styles.recommendationTarget}>{this.props.recTargetProp}</div>
-          </div>
-          <div className={styles.recommendationsBlock}>
-            {RecommendationsRender(this.state.recommendations)}
-          </div>
+      <div className={styles.recommendationsSection} style={{width: "100%"}}>
+        <div className={styles.recommendationHeader}>
+          <div className={styles.recommendationsLabel} style={{marginTop: "10px"}}>{"Song Recommendations"}</div>
+          <div className={styles.recommendationsHeaderSpacer}></div>
+          <div className={styles.recommendationTarget}>{this.props.recTargetProp}</div>
         </div>
-      </>
+        <div className={styles.recommendationsBlock}>
+          {RecommendationsRender(this.state.recommendations)}
+        </div>
+      </div>
     );
   }
 }
