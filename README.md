@@ -18,10 +18,6 @@ Check out [Spicetify's docs](https://spicetify.app/docs/development/spicetify-cr
 
 - https://github.com/spicetify/spicetify-creator
 
-## Installation
-
-Simply download the corresponding installation script for either Windows (install.ps1) or Mac (install.sh) and run it!
-
 ## Build
 
 First clone the repo into your `...\spicetify\CustomApps\` directory and then run the following commands:
