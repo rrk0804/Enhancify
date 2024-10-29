@@ -44,6 +44,9 @@ class SettingsModal extends React.Component<{changeRecTarget: () => void,
                             </button>);
                     })}
             </div>
+            <div className={styles.settingContainer} style={{position: "absolute", bottom: "0", paddingLeft: "0", marginLeft: "-13px", marginBottom: "5px"}}>
+                <span className={styles.settingLabel} style={{fontSize: "smaller"}}>{"Enhancify Version 0.1.0"}</span>
+            </div> 
       </div>);
     }
 }
