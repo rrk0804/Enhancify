@@ -1,0 +1,1 @@
+{"version":3,"file":"MarketsEndpoints.js","sourceRoot":"","sources":["../../../src/endpoints/MarketsEndpoints.ts"],"names":[],"mappings":"AACA,OAAO,aAAa,MAAM,oBAAoB,CAAC;AAE/C,MAAM,CAAC,OAAO,OAAO,gBAAiB,SAAQ,aAAa;IAChD,mBAAmB;QACtB,OAAO,IAAI,CAAC,UAAU,CAAU,SAAS,CAAC,CAAC;IAC/C,CAAC;CACJ"}

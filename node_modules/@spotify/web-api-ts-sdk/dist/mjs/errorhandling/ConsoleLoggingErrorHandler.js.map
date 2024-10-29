@@ -1,0 +1,1 @@
+{"version":3,"file":"ConsoleLoggingErrorHandler.js","sourceRoot":"","sources":["../../../src/errorhandling/ConsoleLoggingErrorHandler.ts"],"names":[],"mappings":"AAEA,MAAM,CAAC,OAAO,OAAO,0BAA0B;IACpC,KAAK,CAAC,YAAY,CAAC,KAAU;QAChC,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC;QACnB,OAAO,KAAK,CAAC;IACjB,CAAC;CACJ"}
