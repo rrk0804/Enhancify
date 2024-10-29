@@ -6,10 +6,13 @@
 .topBar {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .nowPlayingSidebar {
-  width: 300px;
+  width: 280px;
+  margin-left: 30px;
+  margin-right: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,7 +20,7 @@
 }
 
 .trackInfoPrimary {
-  width: 280px;
+  width: 100%;
   margin-top: 35px;
   display: flex;
   flex-direction: column;
@@ -27,8 +30,8 @@
 
 .trackCover {
   border-radius: 5px;
-  width: 250px;
-  height: 250px;
+  width: 300px;
+  height: 300px;
 }
 
 .statsBlock {
@@ -92,20 +95,20 @@
 }
 
 .recommendationsSection {
-  width: 750px;
   padding-bottom: 20px;
   padding-left: 20px;
   padding-right: 20px;
+
 }
 
 .recommendationsBlock {
+  height: 350px;
+  width: 100%;
   border-radius: 5px;
   margin-top: 8px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  row-gap: 13px;
-  column-gap: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .trackContainer {
@@ -114,6 +117,7 @@
   border-radius: 10px;
   padding: 10px;
   padding-right: 20px;
+  margin: 5px;
 }
 
 .trackContainer:hover {

@@ -231,9 +231,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
               </div>
             : <></>}
           </div>
-          <div style={{display: "flex", flexDirection: "row"}}>
             <DynamicRecommendations recTargetProp={this.state.recTarget}></DynamicRecommendations>
-          </div>
         </div>
         
         {/* Stats block */}
