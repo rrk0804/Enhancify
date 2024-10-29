@@ -35,7 +35,6 @@ jobs:
     
     - name: npm install and build
       run: |
-        rm -rf node_modules
         echo $GITHUB_PATH
         echo $PATH
         npm install
