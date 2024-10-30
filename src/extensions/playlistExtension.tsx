@@ -242,7 +242,6 @@ const initPlaylistPageLogic = () => {
                 presetItem.style.color = "white";
                 presetItem.addEventListener("click", () => {
                     inputElement.value = preset;
-                    presetName = preset; // Update presetName when a dropdown item is selected
                     dropdownContainer.style.display = "none";
                     applyOverlayZIndex("");
                 });
@@ -279,12 +278,12 @@ const initPlaylistPageLogic = () => {
                 customOrderButton.insertAdjacentHTML('beforebegin', buttonHTML);
 
                 setupPresetDropdown(playlistID);
-
-                document.getElementById("savePresetBtn").addEventListener("click", () => {
+                document.getElementById("savePresetBtn")?.addEventListener("click", () => {
                     const presetName = (document.getElementById("presetNameInput") as HTMLInputElement).value;
                     savePreset(presetName, playlistID);
                 });
-                document.getElementById("loadPresetBtn").addEventListener("click", () => {
+                
+                document.getElementById("loadPresetBtn")?.addEventListener("click", () => {
                     const presetName = (document.getElementById("presetNameInput") as HTMLInputElement).value;
                     loadPreset(presetName, playlistID);
                 });
