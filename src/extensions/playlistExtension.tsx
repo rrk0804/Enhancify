@@ -128,11 +128,6 @@ const initPlaylistPageLogic = () => {
                             <span class="Type__TypeElement-sc-goli3j-0 TypeElement-type-mesto ellipsis-one-line" data-encore-id="type">Valence</span>
                         </button>
                     </li>
-                    <li role="presentation" class="main-contextMenu-menuItem custom-sorting">
-                        <button class="main-contextMenu-menuItemButton" role="menuitemradio" aria-checked="false" tabindex="-1" data-roving-interactive="0">
-                            <span class="Type__TypeElement-sc-goli3j-0 TypeElement-type-mesto ellipsis-one-line" data-encore-id="type">Duration (ms)</span>
-                        </button>
-                    </li>
                 `;
                 const insertPosition = customOrderDropdown.children[7]; 
 
@@ -144,12 +139,15 @@ const initPlaylistPageLogic = () => {
 
                 const sortingFeatures = [
                     "acousticness", "danceability", "energy", "instrumentalness",
-                    "liveness", "loudness", "speechiness", "tempo", "valence", "duration_ms"
+                    "liveness", "loudness", "speechiness", "tempo", "valence"
                 ];
-
                 document.querySelectorAll(".custom-sorting button").forEach((button, index) => {
                     const sortingFeature = sortingFeatures[index];
                     button.addEventListener("click", () => {
+                        const customOrderButton = document.querySelectorAll(".main-contextMenu-menuItemButton")[0];
+                        if (customOrderButton) {
+                            (customOrderButton as HTMLElement).click();
+                        }
                         sortPlaylistByFeature(playlistID, sortingFeature);
                         document.querySelectorAll(".main-contextMenu-menuItemButton").forEach((btn, i, btns) => {
                             if (i < btns.length - 2) {
