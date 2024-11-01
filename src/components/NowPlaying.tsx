@@ -135,19 +135,6 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     });
   }
 
-  // modalStyles = {
-  //   overlay: {
-  //     backgroundColor: "rgba(0, 0, 0, 0.70)",
-  //   },
-  //   content: {
-  //     position: 'relative',
-  //     top:      '60px',
-  //     left:     '27.5%',
-  //     width:    "550px",
-  //     height:   "610px",
-  //   },
-  // }
-
   modalStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.70)",
