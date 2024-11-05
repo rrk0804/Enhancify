@@ -1,14 +1,29 @@
-import type { GetRecentlyPlayedTracksResponse, GetRecentlyPlayedTracksInput, AudioFeaturesResponse } from "../types/spotify-web-api";
+import type { AudioFeaturesResponse } from "../types/spotify-web-api";
 import getMultiTrackAudioFeatures from "./multiTrackAudioFeaturesService";
 import type { HistoricalMetrics } from "../types/enhancify";
 
-async function getRecentlyPlayedTracksMetrics(apiOptions: GetRecentlyPlayedTracksInput) : Promise<HistoricalMetrics | {}> {
-    let url = "https://api.spotify.com/v1/me/player/recently-played";
+async function getRecentlyPlayedTracksMetrics() : Promise<HistoricalMetrics | {}> {
+    
+    // Set the API option
+    let apiOptions = {
+                        limit: "50",
+                        after: "",
+                     };
+    // Get the date of the first day of the week
+    let today = new Date();
+    let day = today.getDay() || 7;
+    if (day != 1) {
+        today.setHours(-24 * (day - 1));
+    }
+    // Convert the date to UNIX format
+    apiOptions.after = (today.getTime() / 1000).toFixed(0);
+
+    let url = "https://api.spotify.com/v1/me/player/recently-played?";
 
     // Extract the query parameters from the API options input
     // to create a request string
     let queryParams: string[] = [];
-    for (const [key, value] of Object.entries(apiOptions.data)) {
+    for (const [key, value] of Object.entries(apiOptions)) {
         if (!value) {
             continue;
         }
@@ -25,7 +40,6 @@ async function getRecentlyPlayedTracksMetrics(apiOptions: GetRecentlyPlayedTrack
             headers: {
                 Authorization: "Bearer " + accessToken,
             },
-
         }
     );
     
@@ -43,7 +57,6 @@ async function getRecentlyPlayedTracksMetrics(apiOptions: GetRecentlyPlayedTrack
         songIDs.push(item.track.id);
     }
     let audioFeatures = await getMultiTrackAudioFeatures(songIDs);
-
     // Process the audio features
     let relevantMetrics = ["acousticness", "danceability", "energy", "instrumentalness",
                            "liveness", "speechiness", "valence"];
@@ -53,9 +66,9 @@ async function getRecentlyPlayedTracksMetrics(apiOptions: GetRecentlyPlayedTrack
     }
     for (let audioFeature of audioFeatures) {
         for (let feature of Object.keys(audioFeature)) {
-            if (feature in relevantMetrics) {
+            if (relevantMetrics.includes(feature)) {
                 if (audioFeature[feature as keyof AudioFeaturesResponse]) {
-                    metricsData[feature].total += parseInt(audioFeature[feature as keyof AudioFeaturesResponse]);
+                    metricsData[feature].total += parseFloat(audioFeature[feature as keyof AudioFeaturesResponse]);
                     metricsData[feature].count += 1;
                 }
             }
@@ -93,10 +106,12 @@ async function getRecentlyPlayedTracksMetrics(apiOptions: GetRecentlyPlayedTrack
             count: 0
         }
     };
-    for (let metric in Object.keys(metricsData)) {
+    for (let metric of Object.keys(metricsData)) {
         result[metric as keyof HistoricalMetrics].average = metricsData[metric].total / metricsData[metric].count;
         result[metric as keyof HistoricalMetrics].count = metricsData[metric].count;
     }
 
     return result;
 }
+
+export default getRecentlyPlayedTracksMetrics;

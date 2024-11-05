@@ -8,8 +8,8 @@ class SongMetric extends React.Component<{floatValue: string,
                                                 title: string, 
                                                 progressBar: boolean, 
                                                 label: string,
-                                                selectMetric: (metric: string, value: string) => void
-                                                isMetricSelected: boolean}, 
+                                                selectMetric: (metric: string, value: string) => void 
+                                                isMetricSelected?: boolean}, 
                                                 {}>  {
     
     render() {
