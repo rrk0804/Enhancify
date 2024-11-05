@@ -161,7 +161,7 @@ export type GetRecommendationsResponse = {
     }[]
 };
 
-export class GetRecentlyPlayedTracks {
+export class GetRecentlyPlayedTracksInput {
   data = new RecentlyPlayedTracks();
 }
 
