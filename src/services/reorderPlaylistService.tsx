@@ -22,32 +22,32 @@ export default async function reorderPlaylist(playlistID: string, sortedTrackURI
 }
 
 async function PlaylistAPICall(requestType: string, uri: string, chunk: string[]) {
-  const accessToken = Spicetify.Platform.Session.accessToken;
+    const accessToken = Spicetify.Platform.Session.accessToken;
 
-  let trackURIs = [];
-  if (requestType == "DELETE") {
-      for (const songURI of chunk) {
-          trackURIs.push({
-              uri: songURI
-          });
-      }
-  }
+    let trackURIs = [];
+    if (requestType == "DELETE") {
+        for (const songURI of chunk) {
+            trackURIs.push({
+                uri: songURI
+            });
+        }
+    }
 
-  let response = await fetch(uri, {
-      method: requestType,
-      headers: {
-          Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(requestType == "POST" ? {
-          uris: chunk
-      } : {
-          tracks: trackURIs
-      }),
-  });
+    let response = await fetch(uri, {
+        method: requestType,
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(requestType == "POST" ? {
+            uris: chunk
+        } : {
+            tracks: trackURIs
+        }),
+    });
 
-  if (response.status == 200) {
-      console.log(requestType, ' playlist API call successful!');
-  } else {
-      console.error('Failed ', requestType, ' playlist API call: ', response.status, response.statusText);
-  }
+    if (response.status == 200) {
+        console.log(requestType, ' playlist API call successful!');
+    } else {
+        console.error('Failed ', requestType, ' playlist API call: ', response.status, response.statusText);
+    }
 }
