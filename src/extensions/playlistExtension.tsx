@@ -297,7 +297,7 @@ const initPlaylistPageLogic = () => {
             trackOrder: prefixedTrackOrder,
         };
         localStorage.setItem(`preset-${name}-${playlistID}`, JSON.stringify(preset));
-        Spicetify.showNotification(`Preset '${name}' saved.`);
+        Spicetify.showNotification(`Preset saved.`);
     };
 
     const loadPreset = async (name: string, playlistID: string) => {
