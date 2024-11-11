@@ -4,25 +4,50 @@ export default async function reorderPlaylist(playlistID: string, sortedTrackURI
         return;
     }
 
-    const accessToken = Spicetify.Platform.Session.accessToken;
     const uri = `https://api.spotify.com/v1/playlists/${playlistID}/tracks`;
 
-    // Make the PUT request to reorder the playlist
-    const response = await fetch(uri, {
-        method: 'PUT',
+    const chunks = [];
+    const chunkSize = 100;
+    for (let i = 0; i < sortedTrackURIs.length; i += chunkSize) {
+        chunks.push(sortedTrackURIs.slice(i, i + chunkSize));
+    }
+
+    for (const chunk of chunks) {
+        // Make DELETE request to delete the tracks that will be pushed again
+        await PlaylistAPICall("DELETE", uri, chunk);
+
+        // Make POST request to add the new order
+        await PlaylistAPICall("POST", uri, chunk);
+    }
+}
+
+async function PlaylistAPICall(requestType: string, uri: string, chunk: string[]) {
+    const accessToken = Spicetify.Platform.Session.accessToken;
+
+    let trackURIs = [];
+    if (requestType == "DELETE") {
+        for (const songURI of chunk) {
+            trackURIs.push({
+                uri: songURI
+            });
+        }
+    }
+
+    let response = await fetch(uri, {
+        method: requestType,
         headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            uris: sortedTrackURIs,
+        body: JSON.stringify(requestType == "POST" ? {
+            uris: chunk
+        } : {
+            tracks: trackURIs
         }),
     });
 
-    if (response.ok) {
-        console.log('Playlist successfully reordered!');
-        return response.json();
+    if (response.status == 200) {
+        console.log(requestType, ' playlist API call successful!');
     } else {
-        console.error('Failed to reorder playlist:', response.status, response.statusText);
+        console.error('Failed ', requestType, ' playlist API call: ', response.status, response.statusText);
     }
 }
