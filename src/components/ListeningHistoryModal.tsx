@@ -38,6 +38,7 @@ class ListeningHistoryModal extends React.Component <{setModalIsOpen: (value: bo
         }
     }
 
+
     async componentDidMount(): Promise<void> {
         let newState = await getRecentlyPlayedTracksMetrics();
         this.setState({
@@ -54,6 +55,33 @@ class ListeningHistoryModal extends React.Component <{setModalIsOpen: (value: bo
                                                                         marginTop:    "10px",
                                                                         }}>
                         {"Listening History"}
+                    </div>
+                    <div style={{fontSize: "large",
+                                 marginLeft: "15px",
+                                 marginTop: "26px"
+                                }}>
+                        {"Week of "}
+                        <span style={{fontWeight: "bolder"}}>
+                            {function() {
+                                let getDateRange = () => {
+                                    let weekStartDate = new Date();              // Date of the first day of the week
+                                    let day = weekStartDate.getDay() || 7;       // Return 7 if day is Sunday
+                            
+                                    // If today is not a Monday, then rewind the
+                                    // date back to Monday
+                                    if (day != 1) {
+                                        weekStartDate.setHours(-24 * (day - 1));
+                                    }
+                            
+                                    // First Monday of the week and the current date
+                                    return weekStartDate;
+                                }
+
+                                let weekStartDate = getDateRange();
+
+                                return `${weekStartDate.getMonth() + 1}/${weekStartDate.getDate()}`;
+                            }()}
+                        </span>
                     </div>
                     <img className={styles.playIcon} style={{marginLeft: "auto"}} 
                         src={"https://img.icons8.com/?size=100&id=6483&format=png&color=FFFFFF"} 

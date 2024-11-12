@@ -10,8 +10,11 @@ async function getRecentlyPlayedTracksMetrics() : Promise<HistoricalMetrics | {}
                         after: "",
                      };
     // Get the date of the first day of the week
-    let today = new Date();
-    let day = today.getDay() || 7;
+    let today = new Date();         
+    let day = today.getDay() || 7; // Return 7 if day is Sunday
+
+    // If today is not a Monday, then rewind the
+    // date back to the previous Monday
     if (day != 1) {
         today.setHours(-24 * (day - 1));
     }
