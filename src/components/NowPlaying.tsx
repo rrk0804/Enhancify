@@ -9,6 +9,7 @@ import { allMetrics, getSongMetrics } from "../services/enhancifyInternalService
 import RecommendationsModal from "./RecommendationsModal";
 import SettingsModal from "./SettingsModal";
 import Modal from 'react-modal';
+import HelpModal from "./HelpModal";
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
                                               songURI: string, 
@@ -17,6 +18,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                                               metricsToDisplay: string[],
                                               modalIsOpen: boolean,
                                               settingsModalIsOpen: boolean,
+                                              helpModalIsOpen: boolean,
                                               selectedMetrics: SelectedMetrics}> {
   
   state = {
@@ -30,6 +32,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                           [],     // Current metric information types
     modalIsOpen:         false,   // Whether the modal is currently open
     settingsModalIsOpen: false,   
+    helpModalIsOpen:     false,
     selectedMetrics:     JSON.parse(Spicetify.LocalStorage.get("selectedMetrics") || 
                          "{}"), // Metrics that have been selected to be fed into the Spotify recommendations endpoint
   }
@@ -117,6 +120,12 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
   setSettingsModalIsOpen = (value: boolean) => {
     this.setState({
       settingsModalIsOpen: value,
+    });
+  }
+
+  setHelpModalIsOpen = (value: boolean) => {
+    this.setState({
+      helpModalIsOpen: value,
     });
   }
 
@@ -248,8 +257,15 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                            marginTop: "auto", 
                            marginBottom: "auto"}} />
           </div>
-          <div className={styles.settingsIconContainer} onClick={() => this.setSettingsModalIsOpen(true)}>
+          <div className={styles.settingsIconContainer} style={{marginRight: "0px"}} onClick={() => this.setSettingsModalIsOpen(true)}>
               <img src={"https://img.icons8.com/?size=100&id=2969&format=png&color=FFFFFF"} 
+                   style={{width: "25px", 
+                           height: "25px", 
+                           marginTop: "auto", 
+                           marginBottom: "auto"}} />
+          </div>
+          <div className={styles.settingsIconContainer} onClick={() => this.setHelpModalIsOpen(true)}>
+              <img src={"https://img.icons8.com/?size=100&id=2908&format=png&color=FFFFFF"} 
                    style={{width: "25px", 
                            height: "25px", 
                            marginTop: "auto", 
@@ -279,6 +295,9 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
         <Modal className={styles.modal} isOpen={this.state.settingsModalIsOpen} onRequestClose={() => this.setSettingsModalIsOpen(false)} style={this.modalStyles}>
             <SettingsModal changeRecTarget={this.changeRecTarget} toggleMetric={this.toggleMetric} recTarget={this.state.recTarget} metricsToDisplay={this.state.metricsToDisplay} 
                             setModalIsOpen={this.setSettingsModalIsOpen}/>
+        </Modal>
+        <Modal className={styles.modal} isOpen={this.state.helpModalIsOpen} onRequestClose={() => this.setHelpModalIsOpen(false)} style={this.modalStyles}>
+          <HelpModal setModalIsOpen={this.setHelpModalIsOpen}/>
         </Modal>
       </>
     );
