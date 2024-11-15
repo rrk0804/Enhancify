@@ -14,6 +14,8 @@ Spicetify Creator is a tool to compile modern Typescript/Javascript code to Spic
 
 Check out [Spicetify's docs](https://spicetify.app/docs/development/spicetify-creator/the-basics)!
 
+Check out [Enhancify's Comprehensive Documentation](https://github.com/ECE49595-Team-6/EnhancifyInstall/wiki)!
+
 ## Made with Spicetify Creator
 
 - https://github.com/spicetify/spicetify-creator
@@ -26,6 +28,8 @@ First clone the repo into your `...\spicetify\CustomApps\` directory and then ru
 2. `npm run build`
 3. `spicetify config custom_apps Enhancify`
 4. `spicetify apply`
+
+OR utilize our build scripts and installation process here: [EnhancifyInstall](https://github.com/ECE49595-Team-6/EnhancifyInstall)
 
 ## Contributors
 
