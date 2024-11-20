@@ -8,6 +8,7 @@ import { SelectedMetrics, SongMetricData } from "../types/enhancify";
 import { allMetrics, getSongMetrics } from "../services/enhancifyInternalService";
 import RecommendationsModal from "./RecommendationsModal";
 import SettingsModal from "./SettingsModal";
+import ListeningHistoryModal from "./ListeningHistoryModal";
 import Modal from 'react-modal';
 
 class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesResponse | {}, 
@@ -17,6 +18,7 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                                               metricsToDisplay: string[],
                                               modalIsOpen: boolean,
                                               settingsModalIsOpen: boolean,
+                                              historyModalIsOpen: boolean,
                                               selectedMetrics: SelectedMetrics}> {
   
   state = {
@@ -29,7 +31,8 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                           ["Danceability", "Energy", "Acousticness", "Loudness", "Key", "Tempo"] : 
                           [],     // Current metric information types
     modalIsOpen:         false,   // Whether the modal is currently open
-    settingsModalIsOpen: false,   
+    settingsModalIsOpen: false,
+    historyModalIsOpen:  false,   
     selectedMetrics:     JSON.parse(Spicetify.LocalStorage.get("selectedMetrics") || 
                          "{}"), // Metrics that have been selected to be fed into the Spotify recommendations endpoint
   }
@@ -120,6 +123,12 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
     });
   }
 
+  setHistoryModalIsOpen = (value: boolean) => {
+    this.setState({
+      historyModalIsOpen: value,
+    })
+  }
+
   // Select a metric to toggle whether they should be included in the recommendations endpoint request or not
   selectMetric = (metric: string, value: string) => {
     let copy: SelectedMetrics = { ...this.state.selectedMetrics };
@@ -160,6 +169,20 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
       transform: 'translate(-50%, -50%)',
       width:     "50%",
       height:    "600px"
+    },
+  }
+
+  historicalMetricsModalStyles = {
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.70)",
+    },
+    content: {
+      position:  'absolute',
+      top:       '43%',
+      left:      '47%',
+      transform: 'translate(-50%, -50%)',
+      width:     "70%",
+      height:    "640px"
     },
   }
 
@@ -248,8 +271,15 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
                            marginTop: "auto", 
                            marginBottom: "auto"}} />
           </div>
-          <div className={styles.settingsIconContainer} onClick={() => this.setSettingsModalIsOpen(true)}>
+          <div className={styles.settingsIconContainer} style={{marginRight: "0px"}} onClick={() => this.setSettingsModalIsOpen(true)}>
               <img src={"https://img.icons8.com/?size=100&id=2969&format=png&color=FFFFFF"} 
+                   style={{width: "25px", 
+                           height: "25px", 
+                           marginTop: "auto", 
+                           marginBottom: "auto"}} />
+          </div>
+          <div className={styles.settingsIconContainer} onClick={() => this.setHistoryModalIsOpen(true)}>
+              <img src={"https://img.icons8.com/?size=100&id=8309&format=png&color=FFFFFF"} 
                    style={{width: "25px", 
                            height: "25px", 
                            marginTop: "auto", 
@@ -279,6 +309,9 @@ class NowPlaying extends React.Component<{}, {audioFeatures: AudioFeaturesRespon
         <Modal className={styles.modal} isOpen={this.state.settingsModalIsOpen} onRequestClose={() => this.setSettingsModalIsOpen(false)} style={this.modalStyles}>
             <SettingsModal changeRecTarget={this.changeRecTarget} toggleMetric={this.toggleMetric} recTarget={this.state.recTarget} metricsToDisplay={this.state.metricsToDisplay} 
                             setModalIsOpen={this.setSettingsModalIsOpen}/>
+        </Modal>
+        <Modal className={styles.modal} isOpen={this.state.historyModalIsOpen} onRequestClose={() => this.setHistoryModalIsOpen(false)} style={this.historicalMetricsModalStyles}>
+          <ListeningHistoryModal setModalIsOpen={this.setHistoryModalIsOpen}></ListeningHistoryModal>
         </Modal>
       </>
     );
