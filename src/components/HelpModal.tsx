@@ -23,7 +23,7 @@ class HelpModal extends React.Component<{setModalIsOpen: (value: boolean) => voi
                 <a href="https://github.com/ECE49595-Team-6/EnhancifyInstall/wiki" className={styles.settingLabel} style={{fontSize: "large", fontWeight: "bolder"}}>Enhancify Wiki Link</a>
             </div>
             <div className={styles.settingContainer} style={{position: "absolute", bottom: "0", paddingLeft: "0", marginLeft: "-13px", marginBottom: "5px"}}>
-                <span className={styles.settingLabel} style={{fontSize: "medium"}}>{"Enhancify Version 0.2.0"}</span>
+                <span className={styles.settingLabel} style={{fontSize: "medium"}}>{"Enhancify Version 1.0.0"}</span>
             </div> 
       </div>);
     }
